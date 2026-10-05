@@ -15,6 +15,7 @@ import logging
 import math
 import os
 import re
+from datetime import datetime, timezone
 from typing import Literal
 
 from forecasting_tools import (
@@ -35,7 +36,6 @@ from forecasting_tools import (
     clean_indents,
     structure_output,
 )
-from forecasting_tools.data_models.data_organizer import DataOrganizer
 from forecasting_tools.data_models.multiple_choice_report import PredictedOption
 from forecasting_tools.forecast_bots.official_bots.template_bot_2026_fall import (
     FallTemplateBot2026,
@@ -85,6 +85,38 @@ def has_asknews_credentials() -> bool:
     return _real_env("ASKNEWS_API_KEY") or (
         _real_env("ASKNEWS_CLIENT_ID") and _real_env("ASKNEWS_SECRET")
     )
+
+
+def _pct(probability: float) -> str:
+    return f"{probability * 100:.1f}".rstrip("0").rstrip(".") + "%"
+
+
+def _number(value: float) -> str:
+    if abs(value) >= 1000:
+        return f"{value:,.0f}"
+    if abs(value) >= 10:
+        return f"{value:,.1f}"
+    return f"{value:.3g}"
+
+
+def compact_prediction(value) -> str:
+    """One-line summary of any prediction, for comments and the forecast log."""
+    if isinstance(value, float):
+        return _pct(value)
+    if isinstance(value, PredictedOptionList):
+        return " / ".join(
+            f"{option.option_name} {_pct(option.probability)}" for option in value.predicted_options
+        )
+    if isinstance(value, NumericDistribution):
+        p10, p50, p90 = (
+            point.value for point in value.get_percentiles_at_target_heights([0.1, 0.5, 0.9])
+        )
+        if getattr(value, "is_date", False):
+            show = lambda v: datetime.fromtimestamp(v, tz=timezone.utc).date().isoformat()
+        else:
+            show = _number
+        return f"median {show(p50)} [80% range {show(p10)} to {show(p90)}]"
+    return str(value)
 
 
 def parse_queries(text: str, limit: int = 2) -> list[str]:
@@ -271,7 +303,7 @@ class EnsembleBot(FallTemplateBot2026):
         else:
             raise ValueError(f"Unsupported question type: {type(question).__name__}")
         logger.info(
-            f"{spec.short_name} forecast {question.page_url}: {DataOrganizer.get_readable_prediction(value)}"
+            f"{spec.short_name} forecast {question.page_url}: {compact_prediction(value)}"
         )
         return ReasonedPrediction(prediction_value=value, reasoning=reasoning)
 
@@ -417,7 +449,7 @@ class EnsembleBot(FallTemplateBot2026):
         combined,
         failures: list[str],
     ) -> str:
-        readable = DataOrganizer.get_readable_prediction
+        readable = compact_prediction
         lines = [
             "## How the final forecast was made",
             f"Final forecast: {readable(combined)}",
