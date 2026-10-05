@@ -1,0 +1,29 @@
+name: Keep the schedule alive
+
+# GitHub switches off scheduled workflows in public repos after 60 days without a
+# commit. A season runs longer than that, so once a week this checks the last
+# commit and, if the repo has been quiet for 40 days, adds an empty commit.
+on:
+  schedule:
+    - cron: "17 3 * * 1" # Mondays 03:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Empty commit if the repo has been quiet for 40 days
+        run: |
+          days_quiet=$(( ( $(date +%s) - $(git log -1 --format=%ct) ) / 86400 ))
+          echo "Days since last commit: $days_quiet"
+          if [ "$days_quiet" -ge 40 ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit --allow-empty -m "Keep scheduled workflows active"
+            git push
+          fi
