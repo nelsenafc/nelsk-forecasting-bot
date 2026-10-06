@@ -46,6 +46,12 @@ jobs:
           METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
       - name: Show the summary in the run page
         run: cat review.md >> $GITHUB_STEP_SUMMARY
+      # Our own scorecard: peer score, calibration, which labs earn their cost, and the
+      # price model. Resolved questions only, so it is safe in a public log.
+      - name: Scorecard
+        run: poetry run python scorecard.py --json scorecard.json
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
       - name: Keep the review
         uses: actions/upload-artifact@v4
         with:
@@ -53,4 +59,5 @@ jobs:
           path: |
             review.json
             review.md
+            scorecard.json
           retention-days: 90

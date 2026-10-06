@@ -26,6 +26,7 @@ A question is skipped, and retried on the next run, if both news and web researc
 | `backtest_price_model.py` | Scores the price model on five years of history it never saw |
 | `forecast_log.py` | Exports the bot's tournament forecasts, values only after each question closes |
 | `notion_sync.py` | Keeps a Notion copy of that log current, hourly on GitHub |
+| `scorecard.py` | Scores resolved forecasts: peer score against the field, calibration, which labs earn their cost, and the price model against the AI ensemble |
 | `prompts.py` | Research, market-matching and forecasting prompts |
 | `run.py` | Entry point and run modes |
 | `tests/` | Offline tests, including a full pipeline run with fake models |
