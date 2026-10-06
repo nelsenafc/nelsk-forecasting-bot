@@ -15,7 +15,7 @@ import logging
 import math
 import os
 import re
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Literal
 
 from forecasting_tools import (
@@ -43,6 +43,7 @@ from forecasting_tools.forecast_bots.official_bots.template_bot_2026_fall import
 from pydantic import BaseModel
 
 import markets
+import price_model
 import prompts
 from ensemble import (
     ForecasterSpec,
@@ -66,6 +67,34 @@ class MarketMatch(BaseModel):
     index: int
     match: Literal["exact", "close", "related"]
     note: str
+
+
+class PriceSpec(BaseModel):
+    is_price_question: bool
+    source: Literal["yahoo", "fred", "fear_greed", "none"]
+    symbol: str = ""
+    target_date: str = ""
+    kind: Literal["log", "level"] = "log"
+    multiplier: float = 1.0
+    note: str = ""
+
+
+def question_key(question: MetaculusQuestion) -> str:
+    return str(question.id_of_question or question.page_url or question.question_text)
+
+
+def price_model_problem(question: NumericQuestion, forecast: price_model.PriceForecast, today) -> str | None:
+    """Why the statistical model shouldn't be trusted for this question, or None if it can be."""
+    max_age = 21 if forecast.freq == "weekly" else 10
+    if (today - forecast.series.last_date).days > max_age:
+        return f"latest data is from {forecast.series.last_date}, too stale"
+    low = question.nominal_lower_bound if question.nominal_lower_bound is not None else question.lower_bound
+    high = question.nominal_upper_bound if question.nominal_upper_bound is not None else question.upper_bound
+    width = high - low
+    current = forecast.series.last_value * forecast.multiplier
+    if not (low - width <= current <= high + width):
+        return f"latest value {current:,.4g} is far outside the question's range {low:,.4g} to {high:,.4g}"
+    return None
 
 
 def llm_for(spec: ForecasterSpec) -> GeneralLlm:
@@ -139,11 +168,17 @@ class EnsembleBot(FallTemplateBot2026):
         *,
         forecasters: list[ForecasterSpec] | None = None,
         use_market_signals: bool = True,
+        use_price_model: bool = True,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.forecasters = forecasters or default_forecasters()
         self.use_market_signals = use_market_signals
+        self.use_price_model = use_price_model
+        # Share of the final numeric forecast given to the statistical price model when
+        # one applies; the AI ensemble keeps the rest, and sees the model in its research.
+        self.price_model_weight = float(os.getenv("PRICE_MODEL_WEIGHT", "0.5"))
+        self._price_forecasts: dict[str, tuple[NumericDistribution, price_model.PriceForecast, PriceSpec]] = {}
 
     @classmethod
     def _llm_config_defaults(cls) -> dict[str, str | GeneralLlm | None]:
@@ -177,6 +212,8 @@ class EnsembleBot(FallTemplateBot2026):
             }
             if self.use_market_signals:
                 sources["markets"] = self._market_research(question)
+            if self.use_price_model and isinstance(question, NumericQuestion):
+                sources["price model"] = self._price_research(question)
             results = await asyncio.gather(*sources.values(), return_exceptions=True)
 
         sections: dict[str, str] = {}
@@ -234,6 +271,42 @@ class EnsembleBot(FallTemplateBot2026):
         ]
         return markets.format_market_section(matches)
 
+    async def _price_research(self, question: NumericQuestion) -> str:
+        """Run the statistical price model when the question is about one market series on one date."""
+        cheap = self.get_llm("parser", "llm")
+        verdict = await cheap.invoke(prompts.price_spec_prompt(question))
+        spec: PriceSpec = await structure_output(
+            verdict,
+            PriceSpec,
+            model=cheap,
+            additional_instructions="Copy the decision from the text. If the text does not clearly say the question qualifies, set is_price_question to false.",
+        )
+        if not spec.is_price_question or spec.source == "none" or not spec.symbol and spec.source != "fear_greed":
+            return ""
+        bounds = (0.0, 100.0) if spec.source == "fear_greed" else None
+        forecast = await asyncio.to_thread(
+            price_model.forecast,
+            spec.source,
+            spec.symbol,
+            date.fromisoformat(spec.target_date),
+            spec.kind,
+            spec.multiplier,
+            bounds,
+        )
+        if forecast is None:
+            return ""
+        problem = price_model_problem(question, forecast, datetime.now(timezone.utc).date())
+        if problem:
+            logger.warning(f"Price model not used for {question.page_url}: {problem}")
+            return ""
+        percentiles = [
+            Percentile(percentile=q, value=forecast.percentile(q)) for q in [i / 100 for i in range(1, 100)]
+        ]
+        distribution = NumericDistribution.from_question(percentiles, question)
+        self._price_forecasts[question_key(question)] = (distribution, forecast, spec)
+        note = f" Note: {spec.note}" if spec.note else ""
+        return f"## Statistical price model\n{forecast.summary()}{note}"
+
     ##################################### FORECASTING #####################################
 
     async def _make_prediction(
@@ -270,9 +343,37 @@ class EnsembleBot(FallTemplateBot2026):
             logger.warning(f"Some forecasts failed for {question.page_url}: {failures}")
 
         combined = self._combine(question, successes)
+        price_line = None
+        stored = self._price_forecasts.get(question_key(question))
+        if stored and isinstance(question, NumericQuestion):
+            stat_distribution, forecast, spec = stored
+            ensemble_only = combined
+            combined = self._blend_with_price_model(question, combined, stat_distribution)
+            price_line = (
+                f"- stats/price-model: {compact_prediction(stat_distribution)} "
+                f"[{forecast.series.source} {spec.symbol}, {self.price_model_weight:.0%} of the final forecast; "
+                f"AI ensemble alone: {compact_prediction(ensemble_only)}]"
+            )
         return ReasonedPrediction(
             prediction_value=combined,
-            reasoning=self._ensemble_reasoning(successes, combined, failures),
+            reasoning=self._ensemble_reasoning(successes, combined, failures, price_line),
+        )
+
+    def _blend_with_price_model(
+        self,
+        question: NumericQuestion,
+        ensemble: NumericDistribution,
+        statistical: NumericDistribution,
+    ) -> NumericDistribution:
+        ensemble_cdf, statistical_cdf = ensemble.get_cdf(), statistical.get_cdf()
+        weight = min(max(self.price_model_weight, 0.0), 1.0)
+        heights = [
+            (1 - weight) * low.percentile + weight * high.percentile
+            for low, high in zip(ensemble_cdf, statistical_cdf)
+        ]
+        return NumericDistribution.from_question(
+            [Percentile(value=point.value, percentile=height) for point, height in zip(ensemble_cdf, heights)],
+            question,
         )
 
     async def _forecast_once(
@@ -448,6 +549,7 @@ class EnsembleBot(FallTemplateBot2026):
         successes: list[tuple[ForecasterSpec, ReasonedPrediction]],
         combined,
         failures: list[str],
+        price_line: str | None = None,
     ) -> str:
         readable = compact_prediction
         lines = [
@@ -456,8 +558,15 @@ class EnsembleBot(FallTemplateBot2026):
             "Each model forecast independently from the same research. Each AI lab gets equal weight: "
             "binary forecasts are averaged in log-odds, multiple choice and numeric forecasts as weighted averages.",
         ]
+        if price_line:
+            lines.append(
+                "The question is about one market series on one date, so the AI ensemble was blended with a "
+                "statistical model of that series [past moves of the same length, scaled to today's volatility]."
+            )
         for spec, result in successes:
             lines.append(f"- {spec.short_name}: {readable(result.prediction_value)}")
+        if price_line:
+            lines.append(price_line)
         if failures:
             lines.append(f"{len(failures)} forecast(s) failed and were left out.")
         for number, (spec, result) in enumerate(successes, start=1):

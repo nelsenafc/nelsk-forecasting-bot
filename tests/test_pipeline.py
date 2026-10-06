@@ -7,7 +7,9 @@ together for each question type without spending a cent.
 import asyncio
 import re
 import typing
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
+
+import numpy as np
 
 import pytest
 from forecasting_tools import (
@@ -23,8 +25,9 @@ from forecasting_tools.data_models.multiple_choice_report import PredictedOption
 
 import forecaster
 import markets
+import price_model
 from ensemble import ForecasterSpec, combine_binary
-from forecaster import EnsembleBot, MarketMatch
+from forecaster import EnsembleBot, MarketMatch, PriceSpec
 
 BINARY_ANSWERS = {"openai": 30, "anthropic": 40, "google": 20}
 
@@ -51,14 +54,18 @@ async def fake_invoke(self, prompt, *args, **kwargs):
         return "Bank Indonesia rate cut November\nBI rate decision 2026"
     if "checking which prediction markets" in text:
         return "[0] exact - same meeting and criteria."
+    if "free data feed carries" in text:
+        return "PRICE yahoo BZ=F" if "Brent" in text else "NOT A PRICE QUESTION"
     if "resolves YES" in text:
         return f"Base rate reasoning...\nProbability: {BINARY_ANSWERS[lab]}%"
     if "probability of each option" in text:
         return "Hold: 60%\nCut: 30%\nHike: 10%" if lab == "openai" else "Hold: 50%\nCut: 40%\nHike: 10%"
     if "distribution for this quantity" in text:
         shift = {"openai": 0.0, "anthropic": 0.2, "google": -0.2}[lab]
+        center, scale = (105.0, 5.0) if "Brent" in text else (2.0, 1.0)
         return "\n".join(
-            f"Percentile {p}: {2.0 + shift + (p - 50) / 50:.2f}" for p in (5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95)
+            f"Percentile {p}: {center + scale * (shift + (p - 50) / 50):.2f}"
+            for p in (5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95)
         )
     return "Summary of research."
 
@@ -77,6 +84,11 @@ async def fake_structure_output(text_to_structure, output_type, *args, **kwargs)
         return [Percentile(percentile=int(p) / 100, value=float(v)) for p, v in pairs]
     if typing.get_args(output_type) == (MarketMatch,):
         return [MarketMatch(index=0, match="exact", note="Same meeting and criteria.")]
+    if output_type is PriceSpec:
+        if text.startswith("PRICE"):
+            target = (datetime.now(timezone.utc).date() + timedelta(days=14)).isoformat()
+            return PriceSpec(is_price_question=True, source="yahoo", symbol="BZ=F", target_date=target)
+        return PriceSpec(is_price_question=False, source="none")
     raise AssertionError(f"Unexpected output type {output_type}")
 
 
@@ -191,3 +203,55 @@ def test_forecast_survives_one_lab_failing(monkeypatch):
     expected = combine_binary([0.30, 0.30, 0.40], ["openai", "openai", "anthropic"])
     assert report.prediction == pytest.approx(expected)
     assert "failed and were left out" in report.explanation
+
+
+def fake_brent_series(source, symbol):
+    rng = np.random.default_rng(3)
+    days, current = [], datetime.now(timezone.utc).date() - timedelta(days=1)
+    while len(days) < 1500:
+        if current.weekday() < 5:
+            days.append(current)
+        current -= timedelta(days=1)
+    values = 100.0 * np.exp(np.cumsum(rng.normal(0, 0.02, 1500)))
+    values = values / values[-1] * 100.0  # last close exactly 100
+    return price_model.Series("yahoo", symbol, list(reversed(days)), values)
+
+
+def test_price_question_blends_the_statistical_model(monkeypatch):
+    monkeypatch.setattr(price_model, "fetch", fake_brent_series)
+    question = NumericQuestion(
+        question_text="What will the front-month Brent crude futures settlement price be on the target date?",
+        id_of_post=6,
+        id_of_question=6,
+        page_url="https://www.metaculus.com/questions/6/",
+        upper_bound=130.0,
+        lower_bound=70.0,
+        open_upper_bound=True,
+        open_lower_bound=True,
+        unit_of_measure="USD per barrel",
+        **COMMON,
+    )
+    bot = make_bot()
+    report = asyncio.run(bot.forecast_question(question))
+    median = next(point.value for point in report.prediction.get_cdf() if point.percentile >= 0.5)
+    # The AI ensemble centres on 105 and the price model on 100; the 50/50 blend lands between.
+    assert 100.5 < median < 104.5
+    assert "stats/price-model" in report.explanation
+    assert "Statistical price model" in report.explanation
+
+
+def test_non_price_numeric_questions_skip_the_model():
+    question = NumericQuestion(
+        question_text="What will Indonesia's year-on-year CPI inflation be for October 2026?",
+        id_of_post=7,
+        id_of_question=7,
+        page_url="https://www.metaculus.com/questions/7/",
+        upper_bound=6.0,
+        lower_bound=-2.0,
+        open_upper_bound=True,
+        open_lower_bound=True,
+        unit_of_measure="%",
+        **COMMON,
+    )
+    report = asyncio.run(make_bot().forecast_question(question))
+    assert "stats/price-model" not in report.explanation

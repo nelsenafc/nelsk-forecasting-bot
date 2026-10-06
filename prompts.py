@@ -95,6 +95,36 @@ def market_judge_prompt(question: MetaculusQuestion, candidates: str) -> str:
     )
 
 
+def price_spec_prompt(question: MetaculusQuestion) -> str:
+    return clean_indents(
+        f"""
+        Decide whether this forecasting question resolves on a single observation of a market price or published data series that a free data feed carries, and if so, which one.
+
+        {question_block(question)}
+
+        UNITS: {question.unit_of_measure or "not stated"}
+
+        Supported feeds:
+        - yahoo: Yahoo Finance daily closes. Stocks and ETFs by ticker [FXI, SPY, AAPL], indices [^GSPC S&P 500, ^IXIC Nasdaq Composite, ^DJI Dow, ^VIX, ^N225 Nikkei, ^HSI Hang Seng, ^STOXX50E], front-month futures [BZ=F Brent, CL=F WTI, NG=F natural gas, GC=F gold, SI=F silver, HG=F copper, RB=F RBOB gasoline, ZC=F corn, ZW=F wheat], FX [EURUSD=X, JPY=X for USD/JPY, CNY=X for USD/CNY, GBPUSD=X], crypto [BTC-USD, ETH-USD, SOL-USD].
+        - fred: FRED series by ID [GASREGW US regular gasoline weekly from EIA, DGS10 10-year Treasury yield, DGS2, DFF fed funds effective rate, DCOILBRENTEU Brent spot, DCOILWTICO WTI spot, DEXUSEU USD per EUR, T10Y2Y].
+        - fear_greed: the alternative.me Crypto Fear & Greed Index, 0 to 100.
+
+        Answer is_price_question = true only if ALL of these hold:
+        - the answer is one value of the series for one date, such as a close, a settlement or a weekly reading;
+        - the feed tracks the same instrument or statistic the question resolves on. A different publisher's figure for a similar quantity does not count [the AAA daily gas price is not the EIA weekly series]. Small definitional differences on the same instrument are fine: for futures, Yahoo's daily close is the exchange settlement price, and a close versus an official close or last trade does not matter;
+        - it is not a maximum, minimum, average or count over a period.
+
+        If true, also give:
+        - source and symbol from the lists above [another ticker or FRED ID is fine if it is the exact series];
+        - target_date: YYYY-MM-DD of the observation that resolves the question;
+        - kind: "log" for prices and anything that moves in percentage terms; "level" for bounded indices like Fear & Greed and for interest rates in percent;
+        - multiplier: the number that converts the feed's units into the question's units, usually 1;
+        - note: one sentence on any mismatch to watch.
+        If false, set source to "none" and explain in the note.
+        """
+    )
+
+
 _STEPS_INTRO = "Work through these steps in order and write each one out:"
 
 _RESOLUTION_STEP = (
