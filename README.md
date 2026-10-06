@@ -25,6 +25,7 @@ A question is skipped, and retried on the next run, if both news and web researc
 | `price_model.py` | Statistical forecasts for questions about a market series on a date |
 | `backtest_price_model.py` | Scores the price model on five years of history it never saw |
 | `forecast_log.py` | Exports the bot's tournament forecasts, values only after each question closes |
+| `notion_sync.py` | Keeps a Notion copy of that log current, hourly on GitHub |
 | `prompts.py` | Research, market-matching and forecasting prompts |
 | `run.py` | Entry point and run modes |
 | `tests/` | Offline tests, including a full pipeline run with fake models |
@@ -42,6 +43,8 @@ poetry run python run.py --mode tournament               # live tournament + Min
 ```
 
 GitHub Actions runs `--mode tournament` every 20 minutes. Repository secrets needed: `METACULUS_TOKEN`, `OPENROUTER_API_KEY`, `ASKNEWS_API_KEY`.
+
+A second workflow runs `notion_sync.py` hourly once a `NOTION_TOKEN` secret exists [a Notion internal integration connected to the log page]. It adds each new forecast as a row, fills in the numbers after the question closes and the outcome and peer score after it resolves, and prints counts only.
 
 ## Price model backtest
 

@@ -118,9 +118,9 @@ def build_row(question: MetaculusQuestion, comment: str, tournament: str) -> dic
     }
 
 
-def bot_comments(headers: dict, bot_id: int) -> dict[int, str]:
-    """Latest comment text per post, private and public, fetching archived comments in full."""
-    texts: dict[int, str] = {}
+def bot_comment_index(headers: dict, bot_id: int) -> dict[int, dict]:
+    """Latest comment per post, private and public, as the comment list returns it."""
+    comments: dict[int, dict] = {}
     page_size = 100
     for private in ("true", "false"):
         offset = 0
@@ -139,19 +139,28 @@ def bot_comments(headers: dict, bot_id: int) -> dict[int, str]:
                 author = comment.get("author")
                 author_id = author.get("id") if isinstance(author, dict) else author
                 post = comment.get("on_post")
-                if author_id != bot_id or post in texts:
-                    continue
-                text = comment.get("text") or ""
-                if comment.get("is_text_archived"):
-                    time.sleep(1.3)  # the full-text endpoint allows 8 calls per 10 seconds
-                    full = requests.get(f"{API}/comments/{comment['id']}/", headers=headers, timeout=30)
-                    if full.ok:
-                        text = full.json().get("text") or text
-                texts[post] = text
+                if author_id == bot_id and post not in comments:
+                    comments[post] = comment
             if len(results) < page_size:
                 break
             offset += page_size
-    return texts
+    return comments
+
+
+def comment_text(headers: dict, comment: dict) -> str:
+    """A comment's full text. Long comments come back archived and need a call of their own."""
+    text = comment.get("text") or ""
+    if comment.get("is_text_archived"):
+        time.sleep(1.3)  # the full-text endpoint allows 8 calls per 10 seconds
+        full = requests.get(f"{API}/comments/{comment['id']}/", headers=headers, timeout=30)
+        if full.ok:
+            text = full.json().get("text") or text
+    return text
+
+
+def bot_comments(headers: dict, bot_id: int) -> dict[int, str]:
+    """Latest comment text per post, private and public, fetching archived comments in full."""
+    return {post: comment_text(headers, comment) for post, comment in bot_comment_index(headers, bot_id).items()}
 
 
 def main() -> None:

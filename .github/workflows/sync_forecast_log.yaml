@@ -1,0 +1,55 @@
+name: Sync forecast log to Notion
+
+# Hourly: adds the bot's new forecasts to the Notion log, fills in the numbers once a
+# question closes, and the outcome and score once it resolves. Prints counts only.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "37 * * * *"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  # Stays idle until the NOTION_TOKEN secret exists, instead of failing every hour.
+  check-token:
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - id: check
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: echo "ready=$([ -n "$NOTION_TOKEN" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+  sync:
+    needs: check-token
+    if: needs.check-token.outputs.ready == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          python-version: "3.11"
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - name: Load cached venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+      - name: Sync
+        run: poetry run python notion_sync.py
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
