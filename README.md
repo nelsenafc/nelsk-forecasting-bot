@@ -44,7 +44,7 @@ poetry run python run.py --mode tournament               # live tournament + Min
 
 GitHub Actions runs `--mode tournament`. Repository secrets needed: `METACULUS_TOKEN`, `OPENROUTER_API_KEY`, `ASKNEWS_API_KEY`.
 
-Tournament questions stay open for 3 hours, and GitHub's scheduler drops most runs on a small repo [2 of 33 fired on 5-6 Oct 2026]. So an external cron [cron-job.org, free] starts the workflow every 20 minutes through the GitHub API, and the workflow's own 5-minute schedule is the fallback:
+Tournament questions stay open for 3 hours, and GitHub's scheduler drops most runs on a small repo [2 of 33 fired on 5-6 Oct 2026]. So an outside scheduler starts the workflow every 20 minutes through the GitHub API: a launchd job running `gh workflow run` on a Mac covers the hours it is awake, and cron-job.org [free] covers the rest. The workflow's own 5-minute schedule is the fallback. The cron-job.org call:
 
 - `POST https://api.github.com/repos/nelsenafc/nelsk-forecasting-bot/actions/workflows/run_bot_on_tournament.yaml/dispatches` with body `{"ref":"main"}`
 - headers `Authorization: Bearer <token>` and `Accept: application/vnd.github+json`, where the token is fine-grained, limited to this repo, with Actions read and write and nothing else
