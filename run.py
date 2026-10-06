@@ -165,6 +165,10 @@ def main() -> None:
     costs = [report.price_estimate or 0 for report in reports if not isinstance(report, BaseException)]
     if costs:
         print(f"Model cost this run: ${sum(costs):.2f} over {len(costs)} question(s)")
+    if publish and os.getenv("GITHUB_OUTPUT"):
+        # lets the workflow start the Notion log sync only after a run that posted forecasts
+        with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+            output.write(f"forecasts={len(costs)}\n")
     print_run_summary_banner(reports, will_publish=publish, tournament_url=TOURNAMENT_URLS.get(args.mode))
 
 
