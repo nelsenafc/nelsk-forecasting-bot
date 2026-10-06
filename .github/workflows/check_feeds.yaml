@@ -1,0 +1,45 @@
+name: Check price data feeds
+
+# Manual check that the price model's free data feeds answer from GitHub's servers.
+# Read-only and costs nothing: no AI calls, nothing posted to Metaculus.
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          python-version: "3.11"
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - name: Load cached venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+      - name: Fetch each feed
+        run: |
+          poetry run python - <<'EOF'
+          import price_model
+          failures = 0
+          for source, symbol in [("yahoo", "BZ=F"), ("yahoo", "FXI"), ("yahoo", "BTC-USD"), ("fred", "GASREGW"), ("fear_greed", "")]:
+              try:
+                  series = price_model.fetch(source, symbol)
+                  print(f"OK   {source:<10} {series.symbol:<30} {len(series.values):>5} points, last {series.last_value:,.4g} on {series.last_date}")
+              except Exception as error:
+                  failures += 1
+                  print(f"FAIL {source:<10} {symbol:<30} {type(error).__name__}: {error}")
+          raise SystemExit(failures)
+          EOF
