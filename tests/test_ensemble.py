@@ -6,9 +6,22 @@ from ensemble import (
     combine_binary,
     combine_cdfs,
     combine_multiple_choice,
+    default_forecasters,
+    fall_forecasters,
     lab_weights,
     logit,
 )
+
+
+def test_fall_line_up_adds_a_sample_per_lab_and_claude_thinks_harder():
+    default = {spec.lab: spec for spec in default_forecasters()}
+    fall = {spec.lab: spec for spec in fall_forecasters()}
+    assert {lab: spec.samples for lab, spec in fall.items()} == {
+        lab: spec.samples + 1 for lab, spec in default.items()
+    }
+    assert fall["anthropic"].reasoning_effort == "high"
+    assert fall["openai"].reasoning_effort == default["openai"].reasoning_effort
+    assert [spec.model for spec in fall_forecasters()] == [spec.model for spec in default_forecasters()]
 
 
 def test_each_lab_gets_equal_total_weight():

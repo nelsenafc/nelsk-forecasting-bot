@@ -1,8 +1,9 @@
 """Run the forecasting bot.
 
 Modes
-  tournament  New questions in the Fall 2026 FutureEval tournament and the current
-              MiniBench. Publishes. This is what the scheduled GitHub workflow runs.
+  tournament  New questions in the Fall 2026 FutureEval tournament, with the stronger
+              line-up, and the current MiniBench, which waits when credit runs low.
+              Publishes. This is what the GitHub workflow runs.
   test        A few questions from the unscored bot-testing-area. Publishes there
               only, so it is a safe end-to-end check of keys, research and submission.
   cup         The Metaculus Cup, for practice against the human crowd. Publishes.
@@ -36,6 +37,7 @@ import dotenv
 import requests
 from forecasting_tools import MetaculusClient, MetaculusQuestion
 
+from ensemble import ForecasterSpec, fall_forecasters
 from forecaster import EnsembleBot
 from guards import may_preview
 
@@ -44,6 +46,8 @@ logger = logging.getLogger(__name__)
 
 TEST_TOURNAMENT = "bot-testing-area"
 MIN_CREDIT_USD = float(os.getenv("MIN_CREDIT_USD", "2"))
+# Below this, MiniBench waits so the remaining credit goes to Fall 2026, where the prize money is.
+MINIBENCH_MIN_CREDIT_USD = float(os.getenv("MINIBENCH_MIN_CREDIT_USD", "6"))
 TOURNAMENT_URLS = {
     "tournament": "https://www.metaculus.com/tournament/fall-futureeval-2026/",
     "cup": "https://www.metaculus.com/tournament/metaculus-cup-fall-2026/",
@@ -83,8 +87,15 @@ def pick_varied(questions: list[MetaculusQuestion], limit: int) -> list[Metaculu
     return picked
 
 
-def build_bot(publish: bool, skip_previous: bool, use_markets: bool) -> EnsembleBot:
+def minibench_allowed(credit: float | None) -> bool:
+    return credit is None or credit >= MINIBENCH_MIN_CREDIT_USD
+
+
+def build_bot(
+    publish: bool, skip_previous: bool, use_markets: bool, forecasters: list[ForecasterSpec] | None = None
+) -> EnsembleBot:
     return EnsembleBot(
+        forecasters=forecasters,
         research_reports_per_question=1,
         predictions_per_research_report=1,
         use_research_summary_to_forecast=False,
@@ -128,13 +139,20 @@ def main() -> None:
     print_startup_banner(args.mode, will_publish=publish)
 
     if args.mode == "tournament":
-        bot = build_bot(publish=True, skip_previous=True, use_markets=use_markets)
+        bot = build_bot(publish=True, skip_previous=True, use_markets=use_markets, forecasters=fall_forecasters())
         reports = asyncio.run(
             bot.forecast_on_tournament(client.CURRENT_AI_COMPETITION_ID, return_exceptions=True)
         )
-        reports += asyncio.run(
-            bot.forecast_on_tournament(client.CURRENT_MINIBENCH_ID, return_exceptions=True)
-        )
+        if minibench_allowed(credit):
+            bot = build_bot(publish=True, skip_previous=True, use_markets=use_markets)
+            reports += asyncio.run(
+                bot.forecast_on_tournament(client.CURRENT_MINIBENCH_ID, return_exceptions=True)
+            )
+        else:
+            print(
+                f"Only ${credit:.2f} of credit left [MiniBench needs ${MINIBENCH_MIN_CREDIT_USD:.2f}]. "
+                "Skipping MiniBench to keep it for Fall 2026."
+            )
     elif args.mode == "test":
         bot = build_bot(publish=True, skip_previous=False, use_markets=use_markets)
         questions = pick_varied(

@@ -1,6 +1,9 @@
 """Score the bot's resolved tournament forecasts, and each part of the bot on its own.
 
 Answers the questions that decide spending:
+- Is it catching the questions? Each question is open for 3 hours and a missed one scores
+  nothing, so this counts the windows of the last 7 days against the bot's forecasts and
+  shows when the misses opened, in Jakarta time, where the Mac that starts the bot sleeps.
 - Is it beating the field? Spot peer score, the prize metric, per tournament.
 - Is it calibrated? Binary forecasts grouped by probability against how often the events happened.
 - Which lab earns its cost? Each lab's own forecast, read from the bot's comment, scored on the
@@ -9,7 +12,8 @@ Answers the questions that decide spending:
 - Does the price model help? Price model alone against the AI ensemble alone, on the price
   questions where both ran.
 
-Resolved questions only, so the report is safe to print anywhere. No AI calls, no cost.
+It shows forecasts from resolved questions only, so the report is safe to print anywhere.
+No AI calls, no cost.
 Resolved questions are cached in .cache/scorecard.json, since they never change.
 
 Usage: python scorecard.py [--json scorecard.json]
@@ -23,10 +27,11 @@ import math
 import os
 import re
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from statistics import mean, stdev
 
 import dotenv
+import requests
 
 dotenv.load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
@@ -34,6 +39,7 @@ from forecasting_tools import MetaculusClient
 from forecasting_tools.data_models.questions import QuestionState
 
 from forecast_log import (
+    API,
     MODEL_LINE,
     SUMMARY_SECTION,
     bot_comment_index,
@@ -42,7 +48,10 @@ from forecast_log import (
     type_name,
 )
 
-CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "scorecard.json")
+TOURNAMENT_SLUGS = {"Fall 2026": "fall-futureeval-2026", "MiniBench": "minibench"}
+COVERAGE_DAYS = 7
+WIB = timezone(timedelta(hours=7))
+CACHE =os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "scorecard.json")
 CACHE_VERSION = 1  # bump when build_record changes, so cached questions are read again
 UNSCORED = {"annulled", "ambiguous"}
 QUANTILES = (0.1, 0.5, 0.9)
@@ -234,10 +243,10 @@ def build_record(question, comment: str, tournament: str) -> dict | None:
     return record
 
 
-def collect(client: MetaculusClient, headers: dict, cache: dict) -> tuple[list[dict], int]:
+def collect(client: MetaculusClient, headers: dict, comments: dict[int, dict], cache: dict) -> tuple[list[dict], int]:
     """Scorable resolved questions, and how many questions could not be read."""
     records, failed = [], 0
-    for post_id, comment in bot_comment_index(headers, client.get_current_user_id()).items():
+    for post_id, comment in comments.items():
         key = str(post_id)
         if key not in cache:
             try:
@@ -254,7 +263,59 @@ def collect(client: MetaculusClient, headers: dict, cache: dict) -> tuple[list[d
     return records, failed
 
 
+def _when(text: str | None) -> datetime | None:
+    return datetime.fromisoformat(text.replace("Z", "+00:00")) if text else None
+
+
+def windows_from_posts(
+    posts: list[dict], forecast_posts: set[int], now: datetime, days: int = COVERAGE_DAYS
+) -> list[dict]:
+    """Questions that opened in the last `days` days and whose window has closed."""
+    windows = []
+    for post in posts:
+        opened, closes = _when(post.get("open_time")), _when(post.get("scheduled_close_time"))
+        if opened and closes and opened >= now - timedelta(days=days) and closes <= now:
+            windows.append({"post_id": post["id"], "opened": opened.isoformat(), "caught": post["id"] in forecast_posts})
+    return windows
+
+
+def coverage(headers: dict, forecast_posts: set[int], now: datetime) -> dict[str, list[dict]]:
+    """Recent question windows per tournament. MiniBench means its current round."""
+    found = {}
+    for name, slug in TOURNAMENT_SLUGS.items():
+        response = requests.get(
+            f"{API}/posts/",
+            headers=headers,
+            params={"tournaments": slug, "statuses": ["closed", "resolved"], "order_by": "-open_time", "limit": 100},
+            timeout=30,
+        )
+        response.raise_for_status()
+        found[name] = windows_from_posts(response.json().get("results", []), forecast_posts, now)
+    return found
+
+
 # The report ------------------------------------------------------------------------------
+
+
+def coverage_section(windows: dict[str, list[dict]]) -> list[str]:
+    lines = [
+        f"## Coverage, last {COVERAGE_DAYS} days",
+        "Questions whose 3-hour window has closed, and how many the bot forecast. A missed question scores nothing.",
+        "",
+        "| Tournament | Opened | Caught | Missed |",
+        "|---|---|---|---|",
+    ]
+    missed_by_block = Counter()
+    for name, group in windows.items():
+        caught = sum(window["caught"] for window in group)
+        lines.append(f"| {name} | {len(group)} | {caught} | {len(group) - caught} |")
+        for window in group:
+            if not window["caught"]:
+                missed_by_block[datetime.fromisoformat(window["opened"]).astimezone(WIB).hour // 6] += 1
+    if missed_by_block:
+        blocks = ", ".join(f"{block * 6:02d}-{block * 6 + 6:02d}h {missed_by_block[block]}" for block in range(4))
+        lines.append(f"\nMissed questions by opening time, Jakarta: {blocks}.")
+    return lines
 
 
 def field_section(records: list[dict]) -> list[str]:
@@ -360,8 +421,11 @@ def price_section(records: list[dict]) -> list[str]:
     return lines
 
 
-def report(records: list[dict], failed: int, today: str) -> str:
-    lines = [f"# nelsk scorecard - {today}", ""]
+def report(records: list[dict], failed: int, today: str, windows: dict[str, list[dict]] | None = None) -> str:
+    lines = [f"# nelsk scorecard - {today}"]
+    if windows:
+        lines += [""] + coverage_section(windows)
+    lines.append("")
     if not records:
         lines.append("No resolved tournament questions yet.")
     else:
@@ -393,11 +457,13 @@ def main() -> None:
             cache = saved["questions"]
     client = MetaculusClient()
     headers = {"Authorization": f"Token {os.environ['METACULUS_TOKEN']}"}
-    records, failed = collect(client, headers, cache)
+    comments = bot_comment_index(headers, client.get_current_user_id())
+    records, failed = collect(client, headers, comments, cache)
     os.makedirs(os.path.dirname(CACHE), exist_ok=True)
     with open(CACHE, "w") as file:
         json.dump({"version": CACHE_VERSION, "questions": cache}, file)
-    text = report(records, failed, datetime.now(timezone.utc).date().isoformat())
+    now = datetime.now(timezone.utc)
+    text = report(records, failed, now.date().isoformat(), coverage(headers, set(comments), now))
     print(text)
     if os.getenv("GITHUB_STEP_SUMMARY"):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as file:

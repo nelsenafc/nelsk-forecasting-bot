@@ -11,7 +11,7 @@ from __future__ import annotations
 import math
 import os
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -51,6 +51,23 @@ def default_forecasters() -> list[ForecasterSpec]:
             ),
             samples=int(os.getenv("FORECASTER_GOOGLE_SAMPLES", "2")),
         ),
+    ]
+
+
+def fall_forecasters() -> list[ForecasterSpec]:
+    """The line-up for Fall 2026 FutureEval questions.
+
+    A Fall question carries roughly 20x the prize money of a MiniBench question and only
+    about one opens a day, so each lab gets one more sample and Claude thinks at high
+    effort. About 2-3x the cost of the default line-up.
+    """
+    return [
+        replace(
+            spec,
+            samples=spec.samples + 1,
+            reasoning_effort="high" if spec.lab == "anthropic" else spec.reasoning_effort,
+        )
+        for spec in default_forecasters()
     ]
 
 

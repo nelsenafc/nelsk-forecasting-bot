@@ -5,7 +5,16 @@ import pytest
 from forecasting_tools import BinaryQuestion, MultipleChoiceQuestion, NumericQuestion
 from forecasting_tools.data_models.questions import QuestionState
 
-from scorecard import build_record, combine, comment_forecasts, log_score, parse_forecast, range_loss, report
+from scorecard import (
+    build_record,
+    combine,
+    comment_forecasts,
+    log_score,
+    parse_forecast,
+    range_loss,
+    report,
+    windows_from_posts,
+)
 
 SLUGS = ["minibench-2026-10-05"]
 RESOLVED = datetime(2026, 10, 16, tzinfo=timezone.utc)
@@ -130,3 +139,20 @@ def test_report_covers_the_field_calibration_and_labs():
 
 def test_report_with_nothing_resolved():
     assert "No resolved tournament questions yet." in report([], failed=0, today="2026-10-06")
+
+
+def test_coverage_counts_closed_windows_and_misses_by_jakarta_time():
+    now = datetime(2026, 10, 6, 12, 0, tzinfo=timezone.utc)
+    posts = [
+        {"id": 1, "open_time": "2026-10-06T02:00:00Z", "scheduled_close_time": "2026-10-06T05:00:00Z"},
+        {"id": 2, "open_time": "2026-10-05T20:00:00Z", "scheduled_close_time": "2026-10-05T23:00:00Z"},
+        {"id": 3, "open_time": "2026-10-06T10:00:00Z", "scheduled_close_time": "2026-10-06T13:00:00Z"},
+        {"id": 4, "open_time": "2026-09-20T14:00:00Z", "scheduled_close_time": "2026-09-20T17:00:00Z"},
+        {"id": 5, "open_time": "2026-09-08T13:36:53Z", "scheduled_close_time": None},
+    ]
+    windows = windows_from_posts(posts, forecast_posts={1}, now=now)
+    assert [(window["post_id"], window["caught"]) for window in windows] == [(1, True), (2, False)]
+    text = report([], failed=0, today="2026-10-06", windows={"MiniBench": windows})
+    assert "| MiniBench | 2 | 1 | 1 |" in text
+    assert "00-06h 1, 06-12h 0" in text  # 20:00 UTC is 03:00 in Jakarta
+    assert "No resolved tournament questions yet." in text
