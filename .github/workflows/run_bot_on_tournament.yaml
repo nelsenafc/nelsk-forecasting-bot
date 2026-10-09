@@ -55,6 +55,15 @@ jobs:
         run: gh workflow run sync_forecast_log.yaml -R "$GITHUB_REPOSITORY"
         env:
           GH_TOKEN: ${{ github.token }}
+      # GitHub switches workflows off after 60 days without a commit, and its scheduler
+      # barely fires on this repo, so the keepalive is started from here, where runs are frequent.
+      - name: Start the keepalive after 40 quiet days
+        if: always()
+        run: |
+          days_quiet=$(( ( $(date +%s) - $(git log -1 --format=%ct) ) / 86400 ))
+          if [ "$days_quiet" -ge 40 ]; then gh workflow run keepalive.yaml -R "$GITHUB_REPOSITORY"; fi
+        env:
+          GH_TOKEN: ${{ github.token }}
       # No report artifacts here: this repo is public, and the reports hold forecasts for
       # questions other bots are still answering. The reasoning is kept on Metaculus as a
       # private comment on each question and becomes public once the question closes.
