@@ -26,6 +26,7 @@ from forecasting_tools.data_models.multiple_choice_report import PredictedOption
 import forecaster
 import markets
 import price_model
+import resolution_sources
 from ensemble import ForecasterSpec, combine_binary
 from forecaster import EnsembleBot, MarketMatch, PriceSpec
 
@@ -106,6 +107,7 @@ def offline(monkeypatch):
     monkeypatch.setattr(GeneralLlm, "invoke", fake_invoke)
     monkeypatch.setattr(forecaster, "structure_output", fake_structure_output)
     monkeypatch.setattr(markets, "search_all", lambda queries, per_source_limit=5: [QUOTE])
+    monkeypatch.setattr(resolution_sources, "read_sources", lambda question: {})
     for name in ("ASKNEWS_API_KEY", "ASKNEWS_CLIENT_ID", "ASKNEWS_SECRET"):
         monkeypatch.delenv(name, raising=False)
 
@@ -175,6 +177,31 @@ def test_numeric_question_end_to_end():
     assert all(b >= a for a, b in zip(heights, heights[1:]))
     median = next(point.value for point in cdf if point.percentile >= 0.5)
     assert 1.6 < median < 2.4
+
+
+def test_resolution_source_reaches_the_research(monkeypatch):
+    seen = {}
+
+    async def noting_invoke(self, prompt, *args, **kwargs):
+        if "pages a forecasting question says it resolves on" in str(prompt):
+            seen["prompt"] = str(prompt)
+            return "The BI rate is 4.75%, set on 2026-10-21."
+        return await fake_invoke(self, prompt, *args, **kwargs)
+
+    monkeypatch.setattr(GeneralLlm, "invoke", noting_invoke)
+    monkeypatch.setattr(
+        resolution_sources, "read_sources", lambda question: {"https://www.bi.go.id/rate": "BI-Rate 4.75% ..."}
+    )
+    question = BinaryQuestion(
+        question_text="Will Bank Indonesia cut its policy rate in November 2026?",
+        id_of_post=6,
+        page_url="https://www.metaculus.com/questions/6/",
+        **COMMON,
+    )
+    report = asyncio.run(make_bot().forecast_question(question))
+    assert "--- Page: https://www.bi.go.id/rate ---" in seen["prompt"]
+    assert "## Resolution source, read" in report.explanation
+    assert "set on 2026-10-21" in report.explanation
 
 
 def test_bot_refuses_to_forecast_blind(monkeypatch):

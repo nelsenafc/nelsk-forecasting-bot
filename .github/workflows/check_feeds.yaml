@@ -1,6 +1,7 @@
 name: Check price data feeds
 
-# Manual check that the price model's free data feeds answer from GitHub's servers.
+# Manual check that the price model's free data feeds, and the reader for the pages
+# questions resolve on, answer from GitHub's servers.
 # Read-only and costs nothing: no AI calls, nothing posted to Metaculus.
 on:
   workflow_dispatch:
@@ -41,5 +42,11 @@ jobs:
               except Exception as error:
                   failures += 1
                   print(f"FAIL {source:<10} {symbol:<30} {type(error).__name__}: {error}")
+          import resolution_sources
+          # Pages the web-search model could not open: one renders with JavaScript, one turns scripts away.
+          for url in ("https://www.realclearpolling.com/polls/approval/donald-trump/approval-rating", "https://www.bls.gov/news.release/empsit.nr0.htm"):
+              text = resolution_sources.read_page(url)
+              print(f"{'OK  ' if text else 'FAIL'} reader     {url[:60]:<60} {len(text or ''):>6} chars")
+              failures += not text
           raise SystemExit(failures)
           EOF

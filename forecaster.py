@@ -3,7 +3,7 @@
 Built on the Metaculus Fall 2026 template [FallTemplateBot2026], which handles
 question loading, conditional questions, comments and submission. This class
 replaces three pieces:
-- research: AskNews + a web-search model + matching prediction markets
+- research: AskNews + a web-search model + the pages the question resolves on + matching prediction markets
 - forecasting: every question goes to models from three labs
 - combining: see ensemble.py
 """
@@ -45,6 +45,7 @@ from pydantic import BaseModel
 import markets
 import price_model
 import prompts
+import resolution_sources
 from ensemble import (
     ForecasterSpec,
     combine_binary,
@@ -169,12 +170,14 @@ class EnsembleBot(FallTemplateBot2026):
         forecasters: list[ForecasterSpec] | None = None,
         use_market_signals: bool = True,
         use_price_model: bool = True,
+        use_resolution_sources: bool = True,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.forecasters = forecasters or default_forecasters()
         self.use_market_signals = use_market_signals
         self.use_price_model = use_price_model
+        self.use_resolution_sources = use_resolution_sources
         # Share of the final numeric forecast given to the statistical price model when
         # one applies; the AI ensemble keeps the rest, and sees the model in its research.
         self.price_model_weight = float(os.getenv("PRICE_MODEL_WEIGHT", "0.5"))
@@ -210,6 +213,8 @@ class EnsembleBot(FallTemplateBot2026):
                 "news": self._news_research(question),
                 "web": self._web_research(question),
             }
+            if self.use_resolution_sources:
+                sources["resolution source"] = self._source_research(question)
             if self.use_market_signals:
                 sources["markets"] = self._market_research(question)
             if self.use_price_model and isinstance(question, NumericQuestion):
@@ -235,6 +240,13 @@ class EnsembleBot(FallTemplateBot2026):
             "asknews/news-summaries", question.question_text
         )
         return f"## News articles [AskNews]\n{news}"
+
+    async def _source_research(self, question: MetaculusQuestion) -> str:
+        pages = await asyncio.to_thread(resolution_sources.read_sources, question)
+        if not pages:
+            return ""
+        notes = await self.get_llm("parser", "llm").invoke(prompts.source_notes_prompt(question, pages))
+        return f"## Resolution source, read {prompts.today()}\n{notes}"
 
     async def _web_research(self, question: MetaculusQuestion) -> str:
         report = await self.get_llm("researcher", "llm").invoke(

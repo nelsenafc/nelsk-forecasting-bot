@@ -8,6 +8,7 @@ A bot for the [Metaculus FutureEval](https://www.metaculus.com/futureeval/) bot 
    - AskNews articles [free for tournament bots]
    - a web-search model [GPT-6.1 Sol with the provider's native search] asked for current status, scheduled events, base-rate material and expert or market expectations
    - prediction markets on Polymarket [real money] and Manifold [mostly play money], where a cheap model first judges whether each market is about the same event and how its resolution differs
+   - the pages the question says it resolves on, read through a rendering reader [r.jina.ai, free] with a plain fetch as backup, then a cheap model notes the current value and its date. The web-search model often cannot open these pages: on 37 closed questions its research said 19 times that it could not open or verify something
 2. **Forecast with three labs.** The same research goes to GPT-6.1 Sol [2 samples], Claude Sonnet 5.5 [1] and Gemini 3.8 Flash [2]. Fall 2026 questions carry the prize money, about 20x a MiniBench question each, so they get one more sample per lab and Claude at high effort. Each one checks the resolution criteria, anchors on a base rate before reading the news, weighs the evidence, cross-checks any matching market, then answers.
 3. **Combine.** Each lab gets equal weight however many samples it ran. Binary forecasts are averaged in log-odds, multiple choice as a weighted average with a small floor on every option, numeric and date questions as a mixture of the CDFs.
 4. **Price questions get a statistical model too.** When a numeric question resolves on one value of a market series on one date [a stock or ETF close, a futures settlement, an FX rate, crypto, a FRED series, the crypto Fear & Greed index], a cheap model maps it to a free data feed and `price_model.py` simulates where the series lands: every past window as long as the horizon, standardised by the volatility of its day and rescaled to today's. The forecasters see that distribution in their research, and the final forecast blends it 50/50 with the AI ensemble [`PRICE_MODEL_WEIGHT`]. It is skipped when the feed is stale, when the series' latest value sits far outside the question's range, or when the question's figure comes from a different publisher.
@@ -22,6 +23,7 @@ A question is skipped, and retried on the next run, if both news and web researc
 | `forecaster.py` | The bot: research, the ensemble, parsing |
 | `ensemble.py` | The forecaster line-up and the combining math |
 | `markets.py` | Polymarket and Manifold lookups |
+| `resolution_sources.py` | Reads the pages each question says it resolves on |
 | `price_model.py` | Statistical forecasts for questions about a market series on a date |
 | `backtest_price_model.py` | Scores the price model on five years of history it never saw |
 | `forecast_log.py` | Exports the bot's tournament forecasts, values only after each question closes |
