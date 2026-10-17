@@ -27,7 +27,7 @@ import math
 import os
 import re
 from collections import Counter
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from statistics import mean, stdev
 
 import dotenv
@@ -48,8 +48,8 @@ from forecast_log import (
     type_name,
 )
 
-TOURNAMENT_SLUGS = {"Fall 2026": "fall-futureeval-2026", "MiniBench": "minibench"}
 COVERAGE_DAYS = 7
+MINIBENCH_FIRST_ROUND = date(2026, 10, 5)  # a new round starts every other Monday
 WIB = timezone(timedelta(hours=7))
 CACHE =os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "scorecard.json")
 CACHE_VERSION = 1  # bump when build_record changes, so cached questions are read again
@@ -279,18 +279,32 @@ def windows_from_posts(
     return windows
 
 
+def tournament_slugs(now: datetime, days: int = COVERAGE_DAYS) -> dict[str, list[str]]:
+    """Slugs to read per tournament. "minibench" points only at the current round, so the
+    rounds that could hold recent windows are added by their start date."""
+    rounds, start = [], MINIBENCH_FIRST_ROUND
+    while start <= now.date():
+        if start >= now.date() - timedelta(days=days + 14):
+            rounds.append(f"minibench-{start.isoformat()}")
+        start += timedelta(days=14)
+    return {"Fall 2026": ["fall-futureeval-2026"], "MiniBench": ["minibench", *rounds]}
+
+
 def coverage(headers: dict, forecast_posts: set[int], now: datetime) -> dict[str, list[dict]]:
-    """Recent question windows per tournament. MiniBench means its current round."""
+    """Recent question windows per tournament."""
     found = {}
-    for name, slug in TOURNAMENT_SLUGS.items():
-        response = requests.get(
-            f"{API}/posts/",
-            headers=headers,
-            params={"tournaments": slug, "statuses": ["closed", "resolved"], "order_by": "-open_time", "limit": 100},
-            timeout=30,
-        )
-        response.raise_for_status()
-        found[name] = windows_from_posts(response.json().get("results", []), forecast_posts, now)
+    for name, slugs in tournament_slugs(now).items():
+        posts: dict[int, dict] = {}
+        for slug in slugs:
+            response = requests.get(
+                f"{API}/posts/",
+                headers=headers,
+                params={"tournaments": slug, "statuses": ["closed", "resolved"], "order_by": "-open_time", "limit": 100},
+                timeout=30,
+            )
+            response.raise_for_status()
+            posts.update({post["id"]: post for post in response.json().get("results", [])})
+        found[name] = windows_from_posts(list(posts.values()), forecast_posts, now)
     return found
 
 

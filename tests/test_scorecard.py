@@ -13,8 +13,16 @@ from scorecard import (
     parse_forecast,
     range_loss,
     report,
+    tournament_slugs,
     windows_from_posts,
 )
+
+
+def test_coverage_reads_recent_minibench_rounds_by_name():
+    at = lambda day: datetime(2026, 10, day, 3, 0, tzinfo=timezone.utc)
+    assert tournament_slugs(at(17))["MiniBench"] == ["minibench", "minibench-2026-10-05"]
+    assert tournament_slugs(at(25))["MiniBench"] == ["minibench", "minibench-2026-10-05", "minibench-2026-10-19"]
+    assert tournament_slugs(at(17))["Fall 2026"] == ["fall-futureeval-2026"]
 
 SLUGS = ["minibench-2026-10-05"]
 RESOLVED = datetime(2026, 10, 16, tzinfo=timezone.utc)
