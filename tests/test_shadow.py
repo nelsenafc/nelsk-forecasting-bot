@@ -69,7 +69,13 @@ def test_run_appends_one_row_per_shadow_forecast(monkeypatch, tmp_path):
     assert rows[-1]["tool_calls"] == 5 and rows[-1]["research_cost"] == 0.0612
 
 
+def test_the_round_two_burst_cap_expires_on_its_own():
+    assert shadow.daily_cap(datetime(2026, 10, 19, 6, tzinfo=timezone.utc)) == 25
+    assert shadow.daily_cap(datetime(2026, 10, 21, 1, tzinfo=timezone.utc)) == shadow.MAX_PER_DAY
+
+
 def test_run_stops_at_the_daily_cap(monkeypatch, tmp_path):
+    monkeypatch.setattr(shadow, "daily_cap", lambda now: shadow.MAX_PER_DAY)
     recent = (NOW - timedelta(hours=1)).isoformat()
     lines = [json.dumps({"post_id": 100 + i, "forecast": "50%", "made_at": recent}) for i in range(shadow.MAX_PER_DAY)]
     (tmp_path / shadow.SHADOW_FILE).write_text("\n".join(lines) + "\n")

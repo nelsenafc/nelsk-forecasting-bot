@@ -50,6 +50,7 @@ import prompts
 import resolution_sources
 from ensemble import (
     ForecasterSpec,
+    blend_binary,
     combine_binary,
     combine_cdfs,
     combine_multiple_choice,
@@ -79,18 +80,34 @@ class PriceSpec(BaseModel):
     target_date: str = ""
     kind: Literal["log", "level"] = "log"
     multiplier: float = 1.0
+    # Yes/no questions only: YES when the value on target_date is above [or below] threshold.
+    threshold: float | None = None
+    direction: Literal["above", "below", "none"] = "none"
     note: str = ""
+
+
+# When the statistical model and the AI ensemble disagree by more than this on a yes/no price
+# question, one of them has probably misread it [a flipped direction, a wrong threshold], so the
+# blend is skipped rather than averaging a mistake in.
+PRICE_DISAGREEMENT_LIMIT = 0.5
 
 
 def question_key(question: MetaculusQuestion) -> str:
     return str(question.id_of_question or question.page_url or question.question_text)
 
 
-def price_model_problem(question: NumericQuestion, forecast: price_model.PriceForecast, today) -> str | None:
-    """Why the statistical model shouldn't be trusted for this question, or None if it can be."""
+def stale_problem(forecast: price_model.PriceForecast, today) -> str | None:
     max_age = 21 if forecast.freq == "weekly" else 10
     if (today - forecast.series.last_date).days > max_age:
         return f"latest data is from {forecast.series.last_date}, too stale"
+    return None
+
+
+def price_model_problem(question: NumericQuestion, forecast: price_model.PriceForecast, today) -> str | None:
+    """Why the statistical model shouldn't be trusted for this question, or None if it can be."""
+    stale = stale_problem(forecast, today)
+    if stale:
+        return stale
     low = question.nominal_lower_bound if question.nominal_lower_bound is not None else question.lower_bound
     high = question.nominal_upper_bound if question.nominal_upper_bound is not None else question.upper_bound
     width = high - low
@@ -223,7 +240,7 @@ class EnsembleBot(FallTemplateBot2026):
                 sources["similar questions"] = self._history_research(question)
             if self.use_market_signals:
                 sources["markets"] = self._market_research(question)
-            if self.use_price_model and isinstance(question, NumericQuestion):
+            if self.use_price_model and isinstance(question, (NumericQuestion, BinaryQuestion)):
                 sources["price model"] = self._price_research(question)
             results = await asyncio.gather(*sources.values(), return_exceptions=True)
 
@@ -294,8 +311,12 @@ class EnsembleBot(FallTemplateBot2026):
         ]
         return markets.format_market_section(matches)
 
-    async def _price_research(self, question: NumericQuestion) -> str:
-        """Run the statistical price model when the question is about one market series on one date."""
+    async def _price_research(self, question: NumericQuestion | BinaryQuestion) -> str:
+        """Run the statistical price model when the question is about one market series on one date.
+
+        Numeric questions get the simulated distribution. Yes/no questions get the share of
+        simulated paths that end above [or below] the question's threshold.
+        """
         cheap = self.get_llm("parser", "llm")
         verdict = await cheap.invoke(prompts.price_spec_prompt(question))
         spec: PriceSpec = await structure_output(
@@ -318,7 +339,23 @@ class EnsembleBot(FallTemplateBot2026):
         )
         if forecast is None:
             return ""
-        problem = price_model_problem(question, forecast, datetime.now(timezone.utc).date())
+        today = datetime.now(timezone.utc).date()
+        note = f" Note: {spec.note}" if spec.note else ""
+        if isinstance(question, BinaryQuestion):
+            if spec.threshold is None or spec.direction == "none":
+                return ""
+            problem = stale_problem(forecast, today)
+            if problem:
+                logger.warning(f"Price model not used for {question.page_url}: {problem}")
+                return ""
+            above = float((forecast.terminal > spec.threshold).mean())
+            probability = above if spec.direction == "above" else 1 - above
+            self._price_forecasts[question_key(question)] = (probability, forecast, spec)
+            return (
+                f"## Statistical price model\n{forecast.summary()} Share of simulated paths that end "
+                f"{spec.direction} {spec.threshold:,g} on {forecast.target.isoformat()}: {_pct(probability)}.{note}"
+            )
+        problem = price_model_problem(question, forecast, today)
         if problem:
             logger.warning(f"Price model not used for {question.page_url}: {problem}")
             return ""
@@ -327,7 +364,6 @@ class EnsembleBot(FallTemplateBot2026):
         ]
         distribution = NumericDistribution.from_question(percentiles, question)
         self._price_forecasts[question_key(question)] = (distribution, forecast, spec)
-        note = f" Note: {spec.note}" if spec.note else ""
         return f"## Statistical price model\n{forecast.summary()}{note}"
 
     ##################################### FORECASTING #####################################
@@ -368,7 +404,21 @@ class EnsembleBot(FallTemplateBot2026):
         combined = self._combine(question, successes)
         price_line = None
         stored = self._price_forecasts.get(question_key(question))
-        if stored and isinstance(question, NumericQuestion):
+        if stored and isinstance(question, BinaryQuestion):
+            probability, forecast, spec = stored
+            ensemble_only = combined
+            if abs(probability - ensemble_only) <= PRICE_DISAGREEMENT_LIMIT:
+                combined = blend_binary(ensemble_only, probability, self.price_model_weight)
+                share = f"{self.price_model_weight:.0%} of the final forecast"
+            else:
+                logger.warning(f"Price model and ensemble disagree too much on {question.page_url}; not blended")
+                share = "not blended: too far from the AI ensemble"
+            price_line = (
+                f"- stats/price-model: {_pct(probability)} [{forecast.series.source} {spec.symbol} "
+                f"{spec.direction} {spec.threshold:,g} on {forecast.target.isoformat()}, {share}; "
+                f"AI ensemble alone: {_pct(ensemble_only)}]"
+            )
+        elif stored and isinstance(question, NumericQuestion):
             stat_distribution, forecast, spec = stored
             ensemble_only = combined
             combined = self._blend_with_price_model(question, combined, stat_distribution)

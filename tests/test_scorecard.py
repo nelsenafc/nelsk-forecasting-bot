@@ -83,6 +83,17 @@ def test_comment_forecasts_groups_labs_and_reads_the_price_line():
     assert found["ai_alone"] == [89, 100, 112]
 
 
+def test_comment_forecasts_reads_a_yes_no_price_line():
+    text = comment(
+        "Final forecast: 25.7%",
+        "- openai/gpt-6.1-sol: 30%",
+        "- stats/price-model: 22% [yahoo DAL above 105 on 2026-10-15, 50% of the final forecast; "
+        "AI ensemble alone: 29.6%]",
+    )
+    found = comment_forecasts(text, "Binary")
+    assert [found["final"], found["price_model"], found["ai_alone"]] == pytest.approx([0.257, 0.22, 0.296])
+
+
 def test_combine_matches_the_ensemble():
     assert combine([0.1, 0.9], "Binary") == pytest.approx(0.5)
     assert combine([0.2, 0.2], "Binary") == pytest.approx(0.2)

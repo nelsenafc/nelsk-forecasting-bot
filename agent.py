@@ -20,7 +20,7 @@ import logging
 import os
 
 import litellm
-from forecasting_tools import MetaculusQuestion, NumericQuestion
+from forecasting_tools import BinaryQuestion, MetaculusQuestion, NumericQuestion
 
 import history
 import markets
@@ -220,7 +220,7 @@ class AgentBot(EnsembleBot):
         self.agent_runs[question.page_url or question.question_text] = agent
         async with self._concurrency_limiter:
             jobs = {"agent": agent.research()}
-            if self.use_price_model and isinstance(question, NumericQuestion):
+            if self.use_price_model and isinstance(question, (NumericQuestion, BinaryQuestion)):
                 jobs["price model"] = self._price_research(question)
             results = await asyncio.gather(*jobs.values(), return_exceptions=True)
         sections = {}

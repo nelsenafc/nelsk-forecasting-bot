@@ -57,6 +57,9 @@ async def fake_invoke(self, prompt, *args, **kwargs):
     if "checking which prediction markets" in text:
         return "[0] exact - same meeting and criteria."
     if "free data feed carries" in text:
+        threshold = re.search(r"close above \$(\d+)", text)
+        if threshold:
+            return f"PRICE yahoo DAL above {threshold.group(1)}"
         return "PRICE yahoo BZ=F" if "Brent" in text else "NOT A PRICE QUESTION"
     if "resolves YES" in text:
         return f"Base rate reasoning...\nProbability: {BINARY_ANSWERS[lab]}%"
@@ -89,6 +92,16 @@ async def fake_structure_output(text_to_structure, output_type, *args, **kwargs)
     if output_type is PriceSpec:
         if text.startswith("PRICE"):
             target = (datetime.now(timezone.utc).date() + timedelta(days=14)).isoformat()
+            threshold = re.search(r"above (\d+)", text)
+            if threshold:
+                return PriceSpec(
+                    is_price_question=True,
+                    source="yahoo",
+                    symbol="DAL",
+                    target_date=target,
+                    threshold=float(threshold.group(1)),
+                    direction="above",
+                )
             return PriceSpec(is_price_question=True, source="yahoo", symbol="BZ=F", target_date=target)
         return PriceSpec(is_price_question=False, source="none")
     raise AssertionError(f"Unexpected output type {output_type}")
@@ -289,6 +302,33 @@ def test_price_question_blends_the_statistical_model(monkeypatch):
     assert 100.5 < median < 104.5
     assert "stats/price-model" in report.explanation
     assert "Statistical price model" in report.explanation
+
+
+def dal_question(threshold: int, post_id: int) -> BinaryQuestion:
+    return BinaryQuestion(
+        question_text=f"Will Delta Air Lines (DAL) stock close above ${threshold}.00 on the target date?",
+        id_of_post=post_id,
+        id_of_question=post_id,
+        page_url=f"https://www.metaculus.com/questions/{post_id}/",
+        **COMMON,
+    )
+
+
+def test_yes_no_price_question_blends_the_statistical_model(monkeypatch):
+    monkeypatch.setattr(price_model, "fetch", fake_brent_series)  # last close exactly 100
+    report = asyncio.run(make_bot().forecast_question(dal_question(105, 21)))
+    line = re.search(r"stats/price-model: ([\d.]+)% .*AI ensemble alone: ([\d.]+)%", report.explanation)
+    model, ensemble = float(line.group(1)) / 100, float(line.group(2)) / 100
+    assert model < 0.35  # a 5% rise in two weeks at 2% daily volatility is a minority outcome
+    assert min(model, ensemble) < report.prediction < max(model, ensemble)
+    assert "Share of simulated paths that end above 105" in report.explanation
+
+
+def test_yes_no_price_blend_is_skipped_when_far_from_the_ensemble(monkeypatch):
+    monkeypatch.setattr(price_model, "fetch", fake_brent_series)
+    report = asyncio.run(make_bot().forecast_question(dal_question(50, 22)))  # model near 100%, ensemble ~30%
+    assert "not blended: too far from the AI ensemble" in report.explanation
+    assert report.prediction == pytest.approx(combine_binary([0.30, 0.30, 0.40, 0.20], ["openai", "openai", "anthropic", "google"]))
 
 
 def test_non_price_numeric_questions_skip_the_model():

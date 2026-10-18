@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from forecasting_tools import MetaculusQuestion, MultipleChoiceQuestion, clean_indents
+from forecasting_tools import BinaryQuestion, MetaculusQuestion, MultipleChoiceQuestion, clean_indents
 
 
 def _date(value: datetime | None) -> str:
@@ -138,16 +138,28 @@ def price_spec_prompt(question: MetaculusQuestion) -> str:
         - the answer is one value of the series for one date, such as a close, a settlement or a weekly reading;
         - the feed tracks the same instrument or statistic the question resolves on. A different publisher's figure for a similar quantity does not count [the AAA daily gas price is not the EIA weekly series]. Small definitional differences on the same instrument are fine: for futures, Yahoo's daily close is the exchange settlement price, and a close versus an official close or last trade does not matter;
         - it is not a maximum, minimum, average or count over a period.
+        {_price_spec_kind_rule(question)}
 
         If true, also give:
         - source and symbol from the lists above [another ticker or FRED ID is fine if it is the exact series];
         - target_date: YYYY-MM-DD of the observation that resolves the question;
         - kind: "log" for prices and anything that moves in percentage terms; "level" for bounded indices like Fear & Greed and for interest rates in percent;
         - multiplier: the number that converts the feed's units into the question's units, usually 1;
+        - threshold and direction, for a yes/no question only: the number the value is compared with, in the question's units, and "above" if the question resolves YES when the value ends above it or "below" if YES when it ends below it;
         - note: one sentence on any mismatch to watch.
         If false, set source to "none" and explain in the note.
         """
     )
+
+
+def _price_spec_kind_rule(question: MetaculusQuestion) -> str:
+    if isinstance(question, BinaryQuestion):
+        return (
+            "- this is a yes/no question, so it qualifies only if it resolves YES when the series' value on one date "
+            "is above, or below, a fixed number. A new record, a move by some percent from a later date, any day in "
+            "a window, or a comparison between two series does not qualify."
+        )
+    return "- this is a numeric question: the forecast is a distribution for that one value."
 
 
 _STEPS_INTRO = "Work through these steps in order and write each one out:"

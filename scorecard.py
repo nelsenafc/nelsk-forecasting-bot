@@ -64,7 +64,7 @@ NUMBER = r"-?[\d,]*\.?\d+(?:e[+-]?\d+)?"
 DATE = r"\d{4}-\d{2}-\d{2}"
 VALUE = rf"(?:{DATE}|{NUMBER})"
 RANGE = re.compile(rf"median ({VALUE}) \[80% range ({VALUE}) to ({VALUE})\]")
-PERCENT = re.compile(r"^(\d+(?:\.\d+)?)%$")
+PERCENT = re.compile(r"^(\d+(?:\.\d+)?)%")
 FINAL_LINE = re.compile(r"^Final forecast: (.+)$", re.M)
 
 
@@ -418,24 +418,31 @@ def labs_section(records: list[dict]) -> list[str]:
 
 
 def price_section(records: list[dict]) -> list[str]:
-    priced = [r for r in records if r["price_model"] and r["ai_alone"] and r["final"]]
+    priced = [
+        r for r in records if r["price_model"] is not None and r["ai_alone"] is not None and r["final"] is not None
+    ]
     if not priced:
         return []
-    losses = {
-        "Price model alone": [range_loss(r["price_model"], r) for r in priced],
-        "AI ensemble alone": [range_loss(r["ai_alone"], r) for r in priced],
-        "Final blend": [range_loss(r["final"], r) for r in priced],
-    }
-    lines = [
-        "## Price model",
-        f"{len(priced)} price question(s). Quantile loss as % of the range, lower is better.",
-        "",
-        "| Forecast | Mean loss |",
-        "|---|---|",
-    ]
-    lines += [f"| {name} | {mean(values):.2f} |" for name, values in losses.items()]
-    edge, spread = summary([gain(r["price_model"], r["ai_alone"], r) for r in priced])
-    lines.append(f"\nPrice model against the AI ensemble: {edge} per question [80% interval {spread}], + favours the price model.")
+    lines = ["## Price model"]
+    for title, kind, score, better in (
+        ("Numeric", "range", range_loss, "lower is better"),
+        ("Yes/no", "binary", log_score, "higher is better"),
+    ):
+        group = [r for r in priced if family(r["type"]) == kind]
+        if not group:
+            continue
+        unit = "quantile loss as % of the range" if kind == "range" else "log score x100"
+        lines += [
+            "",
+            f"**{title}: {len(group)} question(s), {unit}, {better}**",
+            "",
+            "| Forecast | Mean |",
+            "|---|---|",
+        ]
+        for name, key in (("Price model alone", "price_model"), ("AI ensemble alone", "ai_alone"), ("Final blend", "final")):
+            lines.append(f"| {name} | {mean(score(r[key], r) for r in group):.2f} |")
+        edge, spread = summary([gain(r["price_model"], r["ai_alone"], r) for r in group])
+        lines.append(f"\nPrice model against the AI ensemble: {edge} per question [80% interval {spread}], + favours the price model.")
     return lines
 
 

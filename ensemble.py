@@ -112,6 +112,14 @@ def combine_binary(
     return min(max(sigmoid(pooled), clip[0]), clip[1])
 
 
+def blend_binary(ai: float, model: float, model_weight: float) -> float:
+    """An AI forecast and a statistical model's probability averaged in log-odds, then capped."""
+    weight = min(max(model_weight, 0.0), 1.0)
+    clamp = lambda p: min(max(p, 0.001), 0.999)  # noqa: E731
+    pooled = (1 - weight) * logit(clamp(ai)) + weight * logit(clamp(model))
+    return min(max(sigmoid(pooled), BINARY_CAP[0]), BINARY_CAP[1])
+
+
 def combine_multiple_choice(
     distributions: list[dict[str, float]],
     labs: list[str],

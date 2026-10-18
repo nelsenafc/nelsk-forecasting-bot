@@ -32,6 +32,15 @@ MAX_PER_RUN = int(os.getenv("SHADOW_MAX_PER_RUN", "3"))
 # About $0.25 each, so 6 a day keeps the test near $1.50 a day and still reaches 40 paired
 # resolved questions by early November. MiniBench goes first because it resolves within weeks.
 MAX_PER_DAY = int(os.getenv("SHADOW_MAX_PER_DAY", "6"))
+# MiniBench round 2 opens on 19 Oct with a batch of about 45 questions that resolve together,
+# around 29 Oct-1 Nov. Taking about 25 of them [about $5] brings the 40-question answer about a
+# week sooner. The higher cap expires on its own.
+BURST = (datetime(2026, 10, 19, tzinfo=timezone.utc), datetime(2026, 10, 21, tzinfo=timezone.utc), 25)
+
+
+def daily_cap(now: datetime) -> int:
+    start, end, cap = BURST
+    return cap if start <= now < end else MAX_PER_DAY
 
 
 def read_rows(text: str) -> list[dict]:
@@ -76,7 +85,7 @@ async def run(data_dir: Path, now: datetime | None = None, bot: AgentBot | None 
     rows = load_rows(path)
     done = {row["post_id"] for row in rows}
     today = sum(1 for row in rows if row.get("made_at", "") >= (now - timedelta(days=1)).isoformat())
-    room = min(MAX_PER_RUN, MAX_PER_DAY - today)
+    room = min(MAX_PER_RUN, daily_cap(now) - today)
     if room <= 0:
         return 0
     client = MetaculusClient()
