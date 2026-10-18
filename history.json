@@ -1,0 +1,158 @@
+{
+ "updated_at": "2026-10-18T08:14:28+00:00",
+ "questions": [
+  {
+   "post_id": 45948,
+   "question": "Will Russian and Ukrainian officials hold a round of negotiations on an energy-infrastructure ceasefire between October 15 and October 17, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "7%",
+   "peer_score": 10.134147073469686,
+   "resolved_on": "2026-10-17"
+  },
+  {
+   "post_id": 45947,
+   "question": "What will Bitcoin's price (USD) be on October 17, 2026?",
+   "type": "Numeric",
+   "resolution": 81410.0,
+   "our_forecast": "median 8.401e+04 [80% range 7.747e+04 to 9.116e+04]",
+   "peer_score": 15.676295630768303,
+   "resolved_on": "2026-10-18"
+  },
+  {
+   "post_id": 45946,
+   "question": "Will a hurricane be active in the Eastern Pacific at any point between October 15 and October 17, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "36%",
+   "peer_score": -4.973499500639448,
+   "resolved_on": "2026-10-17"
+  },
+  {
+   "post_id": 45945,
+   "question": "Will Anthropic have publicly released Claude Haiku 5.5 by October 16, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "65%",
+   "peer_score": 19.51071443027394,
+   "resolved_on": "2026-10-07"
+  },
+  {
+   "post_id": 45943,
+   "question": "On how many of the two trading days October 15\u201316, 2026 will US spot Bitcoin ETFs record a net daily inflow?",
+   "type": "Count",
+   "resolution": 1.0,
+   "our_forecast": "median 1.18 [80% range -0.109 to 2.24]",
+   "peer_score": -4.225924823289515,
+   "resolved_on": "2026-10-17"
+  },
+  {
+   "post_id": 45940,
+   "question": "Will Texas have filed a notice of appeal of Judge Pitman's prison air-conditioning injunction as of October 16, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "47%",
+   "peer_score": 17.292357410551684,
+   "resolved_on": "2026-10-08"
+  },
+  {
+   "post_id": 45939,
+   "question": "Will Russian, Ukrainian, and US officials hold a trilateral negotiation meeting between October 15 and 17, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "8%",
+   "peer_score": 10.334676514549852,
+   "resolved_on": "2026-10-17"
+  },
+  {
+   "post_id": 45936,
+   "question": "What will Trump's net approval (approve minus disapprove) be in the RealClearPolitics average on October 15, 2026?",
+   "type": "Numeric",
+   "resolution": -20.7,
+   "our_forecast": "median -21.7 [80% range -24.6 to -18.8]",
+   "peer_score": 13.93064631088016,
+   "resolved_on": "2026-10-16"
+  },
+  {
+   "post_id": 45930,
+   "question": "How many of Peru's 25 regions will show no gubernatorial ticket at 30%+ of valid votes in ONPE's official count as of October 15, 2026?",
+   "type": "Count",
+   "resolution": 15.0,
+   "our_forecast": "median 13.1 [80% range 10.6 to 15.6]",
+   "peer_score": -9.906046888974062,
+   "resolved_on": "2026-10-16"
+  },
+  {
+   "post_id": 45929,
+   "question": "Will Delta Air Lines (DAL) stock close above $85.00 on October 15, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "36%",
+   "peer_score": 8.589136252501616,
+   "resolved_on": "2026-10-15"
+  },
+  {
+   "post_id": 45931,
+   "question": "Will the Verkhovna Rada vote to extend martial law or general mobilization between October 15 and 17, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "14%",
+   "peer_score": 31.232333577255154,
+   "resolved_on": "2026-10-17"
+  },
+  {
+   "post_id": 45932,
+   "question": "Will Bo Nix throw for at least 250 passing yards against the Seahawks on October 15, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "26%",
+   "peer_score": 3.524907137929722,
+   "resolved_on": "2026-10-16"
+  },
+  {
+   "post_id": 45934,
+   "question": "Will PJM have announced a new start date for its Reliability Backstop Procurement auction as of October 15, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "10%",
+   "peer_score": 4.475367791872307,
+   "resolved_on": "2026-10-16"
+  },
+  {
+   "post_id": 45933,
+   "question": "What will be the closing price of Xtend AI Robotics (XTND) on October 15, 2026?",
+   "type": "Numeric",
+   "resolution": 2.12,
+   "our_forecast": "median 2.82 [80% range 2.03 to 4.05]",
+   "peer_score": 33.7660602788708,
+   "resolved_on": "2026-10-15"
+  },
+  {
+   "post_id": 45919,
+   "question": "Will anyone besides Gianni Infantino have publicly declared a candidacy for the 2027 FIFA presidency as of October 15, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "9%",
+   "peer_score": -59.934191605898036,
+   "resolved_on": "2026-10-07"
+  },
+  {
+   "post_id": 45921,
+   "question": "How many total points will be scored in the Seahawks\u2013Broncos Thursday Night Football game on October 15, 2026?",
+   "type": "Count",
+   "resolution": 31.0,
+   "our_forecast": "not recorded",
+   "peer_score": 1.9214790930979864,
+   "resolved_on": "2026-10-16"
+  },
+  {
+   "post_id": 45920,
+   "question": "How many confirmed human West Nile virus cases will RIVM report in the Netherlands for 2026 as of its mid-October update?",
+   "type": "Count",
+   "resolution": 64.0,
+   "our_forecast": "not recorded",
+   "peer_score": -10.693922491170271,
+   "resolved_on": "2026-10-15"
+  }
+ ]
+}
