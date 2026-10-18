@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-18T08:14:28+00:00",
+ "updated_at": "2026-10-18T15:04:58+00:00",
  "questions": [
   {
    "post_id": 45948,
@@ -44,6 +44,15 @@
    "resolution": 1.0,
    "our_forecast": "median 1.18 [80% range -0.109 to 2.24]",
    "peer_score": -4.225924823289515,
+   "resolved_on": "2026-10-17"
+  },
+  {
+   "post_id": 45942,
+   "question": "What will the series score of the 2026 ALCS be after Game 4 (October 16)?",
+   "type": "Multiple choice",
+   "resolution": "Tied 2-2",
+   "our_forecast": "Tied 2-2 34% / One team leads 3-1 51% / A team completes a 4-0 sweep 15%",
+   "peer_score": -1.6055162436860453,
    "resolved_on": "2026-10-17"
   },
   {
