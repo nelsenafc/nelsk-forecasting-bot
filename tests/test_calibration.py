@@ -38,6 +38,13 @@ def test_leave_one_out_rewards_a_real_effect_and_caps_are_scored():
 def test_nothing_changes_without_a_config(monkeypatch, tmp_path):
     monkeypatch.setattr(calibration, "CONFIG", tmp_path / "missing.json")
     assert calibration.apply_binary(0.07) == 0.07
-    (tmp_path / "on.json").write_text('{"binary": {"a": 1.0, "b": 0.0, "floor": 0.05, "ceiling": 0.95}}')
+    (tmp_path / "on.json").write_text('{"binary": {"a": 1.0, "b": 0.0, "floor": 0.10, "ceiling": 0.95}}')
     monkeypatch.setattr(calibration, "CONFIG", tmp_path / "on.json")
-    assert calibration.apply_binary(0.02) == pytest.approx(0.05)
+    assert calibration.apply_binary(0.06) == pytest.approx(0.10)
+
+
+def test_a_fitted_correction_never_goes_past_the_safety_cap(monkeypatch, tmp_path):
+    (tmp_path / "loose.json").write_text('{"binary": {"a": 2.0, "b": 0.0, "floor": 0.01, "ceiling": 0.99}}')
+    monkeypatch.setattr(calibration, "CONFIG", tmp_path / "loose.json")
+    assert calibration.apply_binary(0.06) == pytest.approx(0.05)
+    assert calibration.apply_binary(0.94) == pytest.approx(0.95)

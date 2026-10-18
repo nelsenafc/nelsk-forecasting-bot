@@ -68,7 +68,9 @@ It is tested before it goes live. Each hour the data job runs it on tournament q
 
 ## Calibration
 
-`calibration.py` fits Platt scaling to the bot's resolved yes/no forecasts and tests floors and ceilings, each scored only on questions it was not fitted on. Metaculus found Platt scaling the best post-hoc correction for bots, by a small margin, and capping the strongest difference between winning bots. A correction goes live through `calibration.json` once it wins on 50 or more held-out questions. Until then the bot's forecasts pass through unchanged. A guessed correction is worse than none: pushing forecasts away from 50% by a factor of 1.3 would have cost 34.5 points on the first 7 resolved yes/no questions.
+A fixed safety cap is always on: yes/no forecasts stay between 5% and 95%, and every multiple-choice option keeps about 2%. A confident miss is the one thing that blows up a log score: a miss at 1% costs about 160 points more than a miss at 5%, while even a perfectly calibrated forecaster gives up only a few points on the rare question it would put below 5%.
+
+`calibration.py` fits Platt scaling to the bot's resolved yes/no forecasts and tests tighter floors and ceilings, each scored only on questions it was not fitted on. Metaculus found Platt scaling the best post-hoc correction for bots, by a small margin, and capping the strongest difference between winning bots. A correction goes live through `calibration.json` once it wins on 50 or more held-out questions. Until then the bot's forecasts pass through unchanged. A guessed correction is worse than none: pushing forecasts away from 50% by a factor of 1.3 would have cost 34.5 points on the first 7 resolved yes/no questions.
 
 ## Price model backtest
 

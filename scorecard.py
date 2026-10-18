@@ -40,6 +40,7 @@ from forecasting_tools.data_models.questions import QuestionState
 
 import calibration
 import shadow
+from ensemble import BINARY_CAP
 from forecast_log import (
     API,
     MODEL_LINE,
@@ -134,7 +135,8 @@ def combine(forecasts: list, kind: str):
     """
     if family(kind) == "binary":
         clipped = [min(max(p, 0.01), 0.99) for p in forecasts]
-        return 1 / (1 + math.exp(-mean(math.log(p / (1 - p)) for p in clipped)))
+        pooled = 1 / (1 + math.exp(-mean(math.log(p / (1 - p)) for p in clipped)))
+        return min(max(pooled, BINARY_CAP[0]), BINARY_CAP[1])
     if family(kind) == "choice":
         return {option: mean(f[option] for f in forecasts) for option in forecasts[0]}
     return [mean(f[i] for f in forecasts) for i in range(len(QUANTILES))]

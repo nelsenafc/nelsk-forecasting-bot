@@ -49,9 +49,15 @@ def test_binary_lab_with_more_samples_does_not_dominate():
     assert math.isclose(combined, 0.5)
 
 
-def test_binary_is_clipped_and_survives_extremes():
-    assert combine_binary([1.0, 1.0], ["a", "b"]) == 0.99
-    assert combine_binary([0.0, 0.0], ["a", "b"]) == 0.01
+def test_binary_is_capped_and_survives_extremes():
+    assert combine_binary([1.0, 1.0], ["a", "b"]) == 0.95
+    assert combine_binary([0.0, 0.0], ["a", "b"]) == 0.05
+    assert combine_binary([0.03, 0.02], ["a", "b"]) == 0.05
+
+
+def test_multiple_choice_keeps_every_option_near_two_percent():
+    pooled = combine_multiple_choice([{"A": 0.99, "B": 0.01, "C": 0.0}], ["a"])
+    assert min(pooled.values()) > 0.019
 
 
 def test_binary_needs_matching_lists():

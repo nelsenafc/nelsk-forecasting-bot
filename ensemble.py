@@ -87,11 +87,20 @@ def sigmoid(x: float) -> float:
     return 1.0 / (1.0 + math.exp(-x))
 
 
+# Insurance against confident misses, the one thing that blows up a log score. Even a perfectly
+# calibrated forecaster gives up only a few points on the rare question it would put below 5%
+# [about 0.5 at 3%, 2.5 at 1%], while a miss at 1% costs about 160 points more than a miss at 5%.
+# Capping was the strongest difference between winning bots in Fall 2025 [Metaculus, "AI
+# Forecasting in 2026: What 11 Analyses Say"].
+BINARY_CAP = (0.05, 0.95)
+CHOICE_FLOOR = 0.02
+
+
 def combine_binary(
     probabilities: list[float],
     labs: list[str],
     sample_floor: float = 0.005,
-    clip: tuple[float, float] = (0.01, 0.99),
+    clip: tuple[float, float] = BINARY_CAP,
 ) -> float:
     if len(probabilities) != len(labs):
         raise ValueError("Each probability needs a lab")
@@ -106,7 +115,7 @@ def combine_binary(
 def combine_multiple_choice(
     distributions: list[dict[str, float]],
     labs: list[str],
-    floor: float = 0.005,
+    floor: float = CHOICE_FLOOR,
 ) -> dict[str, float]:
     if len(distributions) != len(labs):
         raise ValueError("Each distribution needs a lab")

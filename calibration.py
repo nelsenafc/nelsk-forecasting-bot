@@ -18,9 +18,11 @@ import json
 import math
 from pathlib import Path
 
+from ensemble import BINARY_CAP
+
 MIN_QUESTIONS = 50
-CLIP = (0.01, 0.99)  # what combine_binary already does
-CAPS = [(0.03, 0.97), (0.05, 0.95), (0.10, 0.90)]
+CLIP = (0.01, 0.99)  # the bot's limits before the 5%/95% cap went live on 18 Oct 2026; the test's baseline
+CAPS = [(0.05, 0.95), (0.10, 0.90), (0.15, 0.85)]  # the live cap first, then tighter candidates
 CONFIG = Path(__file__).with_name("calibration.json")
 
 
@@ -99,7 +101,7 @@ def load() -> dict:
 
 
 def apply_binary(p: float) -> float:
-    """The live correction from calibration.json, or the forecast unchanged when there is none."""
+    """The live correction from calibration.json, never looser than the safety cap; the forecast unchanged when there is none."""
     config = load().get("binary")
     if not config:
         return p
@@ -107,6 +109,6 @@ def apply_binary(p: float) -> float:
         p,
         config.get("a", 1.0),
         config.get("b", 0.0),
-        config.get("floor", CLIP[0]),
-        config.get("ceiling", CLIP[1]),
+        max(config.get("floor", BINARY_CAP[0]), BINARY_CAP[0]),
+        min(config.get("ceiling", BINARY_CAP[1]), BINARY_CAP[1]),
     )
