@@ -28,7 +28,10 @@ from guards import may_preview
 SHADOW_FILE = "shadow.jsonl"
 SHADOW_URL = "https://raw.githubusercontent.com/nelsenafc/nelsk-forecasting-bot/bot-data/shadow.jsonl"
 CLOSED_WITHIN = timedelta(hours=int(os.getenv("SHADOW_CLOSED_WITHIN_HOURS", "6")))
-MAX_PER_RUN = int(os.getenv("SHADOW_MAX_PER_RUN", "6"))
+MAX_PER_RUN = int(os.getenv("SHADOW_MAX_PER_RUN", "3"))
+# About $0.25 each, so 6 a day keeps the test near $1.50 a day and still reaches 40 paired
+# resolved questions by early November. MiniBench goes first because it resolves within weeks.
+MAX_PER_DAY = int(os.getenv("SHADOW_MAX_PER_DAY", "6"))
 
 
 def read_rows(text: str) -> list[dict]:
@@ -70,10 +73,15 @@ async def run(data_dir: Path, now: datetime | None = None, bot: AgentBot | None 
     """Forecast due questions with the agent and append them to shadow.jsonl. Returns how many were written."""
     now = now or datetime.now(timezone.utc)
     path = data_dir / SHADOW_FILE
-    done = {row["post_id"] for row in load_rows(path)}
+    rows = load_rows(path)
+    done = {row["post_id"] for row in rows}
+    today = sum(1 for row in rows if row.get("made_at", "") >= (now - timedelta(days=1)).isoformat())
+    room = min(MAX_PER_RUN, MAX_PER_DAY - today)
+    if room <= 0:
+        return 0
     client = MetaculusClient()
     headers = {"Authorization": f"Token {os.environ['METACULUS_TOKEN']}"}
-    questions = due(client, headers, done, now)[:MAX_PER_RUN]
+    questions = sorted(due(client, headers, done, now), key=lambda q: tournament_name(q) != "MiniBench")[:room]
     bot = bot or AgentBot(publish_reports_to_metaculus=False, skip_previously_forecasted_questions=False)
 
     async def forecast(question):

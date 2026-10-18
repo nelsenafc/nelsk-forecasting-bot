@@ -67,3 +67,15 @@ def test_run_appends_one_row_per_shadow_forecast(monkeypatch, tmp_path):
     rows = shadow.load_rows(tmp_path / shadow.SHADOW_FILE)
     assert rows[-1]["post_id"] == 1 and rows[-1]["forecast"] == "30%"
     assert rows[-1]["tool_calls"] == 5 and rows[-1]["research_cost"] == 0.0612
+
+
+def test_run_stops_at_the_daily_cap(monkeypatch, tmp_path):
+    recent = (NOW - timedelta(hours=1)).isoformat()
+    lines = [json.dumps({"post_id": 100 + i, "forecast": "50%", "made_at": recent}) for i in range(shadow.MAX_PER_DAY)]
+    (tmp_path / shadow.SHADOW_FILE).write_text("\n".join(lines) + "\n")
+    monkeypatch.setattr(shadow, "bot_comment_index", lambda headers, bot_id: COMMENTS)
+    monkeypatch.setattr(shadow, "MetaculusClient", FakeClient)
+    monkeypatch.setenv("METACULUS_TOKEN", "test")
+    bot = FakeBot()
+    assert asyncio.run(shadow.run(tmp_path, now=NOW, bot=bot)) == 0
+    assert bot.forecasted == []
