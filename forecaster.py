@@ -42,6 +42,8 @@ from forecasting_tools.forecast_bots.official_bots.template_bot_2026_fall import
 )
 from pydantic import BaseModel
 
+import calibration
+import history
 import markets
 import price_model
 import prompts
@@ -171,6 +173,7 @@ class EnsembleBot(FallTemplateBot2026):
         use_market_signals: bool = True,
         use_price_model: bool = True,
         use_resolution_sources: bool = True,
+        use_history: bool = True,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -178,6 +181,7 @@ class EnsembleBot(FallTemplateBot2026):
         self.use_market_signals = use_market_signals
         self.use_price_model = use_price_model
         self.use_resolution_sources = use_resolution_sources
+        self.use_history = use_history
         # Share of the final numeric forecast given to the statistical price model when
         # one applies; the AI ensemble keeps the rest, and sees the model in its research.
         self.price_model_weight = float(os.getenv("PRICE_MODEL_WEIGHT", "0.5"))
@@ -215,6 +219,8 @@ class EnsembleBot(FallTemplateBot2026):
             }
             if self.use_resolution_sources:
                 sources["resolution source"] = self._source_research(question)
+            if self.use_history:
+                sources["similar questions"] = self._history_research(question)
             if self.use_market_signals:
                 sources["markets"] = self._market_research(question)
             if self.use_price_model and isinstance(question, NumericQuestion):
@@ -247,6 +253,11 @@ class EnsembleBot(FallTemplateBot2026):
             return ""
         notes = await self.get_llm("parser", "llm").invoke(prompts.source_notes_prompt(question, pages))
         return f"## Resolution source, read {prompts.today()}\n{notes}"
+
+    async def _history_research(self, question: MetaculusQuestion) -> str:
+        entries = await asyncio.to_thread(history.load)
+        text = history.format_similar(history.similar(question.question_text, entries, exclude=question.id_of_post))
+        return f"## How similar past questions resolved\n{text}" if text else ""
 
     async def _web_research(self, question: MetaculusQuestion) -> str:
         report = await self.get_llm("researcher", "llm").invoke(
@@ -531,7 +542,8 @@ class EnsembleBot(FallTemplateBot2026):
         labs = [spec.lab for spec, _ in successes]
         values = [result.prediction_value for _, result in successes]
         if isinstance(question, BinaryQuestion):
-            return combine_binary(values, labs)
+            # Unchanged until calibration.json holds a correction that won on held-out questions.
+            return calibration.apply_binary(combine_binary(values, labs))
         if isinstance(question, MultipleChoiceQuestion):
             pooled = combine_multiple_choice(
                 [

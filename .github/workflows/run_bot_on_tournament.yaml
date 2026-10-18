@@ -55,6 +55,12 @@ jobs:
         run: gh workflow run sync_forecast_log.yaml -R "$GITHUB_REPOSITORY"
         env:
           GH_TOKEN: ${{ github.token }}
+      # Once an hour: refresh the resolved history and shadow-test the agent candidate.
+      - name: Start the hourly data job
+        if: always()
+        run: if [ "$(date -u +%M)" -lt 15 ]; then gh workflow run bot_data.yaml -R "$GITHUB_REPOSITORY"; fi
+        env:
+          GH_TOKEN: ${{ github.token }}
       # GitHub switches workflows off after 60 days without a commit, and its scheduler
       # barely fires on this repo, so the keepalive is started from here, where runs are frequent.
       - name: Start the keepalive after 40 quiet days

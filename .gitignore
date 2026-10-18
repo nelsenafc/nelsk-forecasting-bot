@@ -1,5 +1,6 @@
 ###  Specific to Project ###
 benchmarks/
+data/
 sandbox.py
 reports/
 

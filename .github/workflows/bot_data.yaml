@@ -1,0 +1,58 @@
+name: Bot data and agent shadow test
+
+# Hourly, started by the tournament workflow. Refreshes the bot's resolved history [for the
+# similar-questions lookup] and runs the agent candidate on questions that have just closed,
+# without publishing anything to Metaculus. Both land on the bot-data branch. Prints counts only.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Check out the data branch
+        uses: actions/checkout@v4
+        with:
+          ref: bot-data
+          path: data
+      - uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          python-version: "3.11"
+      - name: Install poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - name: Load cached venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+      - name: Refresh history and shadow-test the agent
+        run: poetry run python bot_data.py
+        env:
+          METACULUS_TOKEN: ${{ secrets.METACULUS_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BOT_DATA_DIR: data
+      - name: Commit the data
+        if: always()
+        working-directory: data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || { git commit -q -m "Data: history and shadow forecasts" && git push -q; }

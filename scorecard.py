@@ -38,6 +38,8 @@ dotenv.load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".en
 from forecasting_tools import MetaculusClient
 from forecasting_tools.data_models.questions import QuestionState
 
+import calibration
+import shadow
 from forecast_log import (
     API,
     MODEL_LINE,
@@ -51,7 +53,7 @@ from forecast_log import (
 COVERAGE_DAYS = 7
 MINIBENCH_FIRST_ROUND = date(2026, 10, 5)  # a new round starts every other Monday
 WIB = timezone(timedelta(hours=7))
-CACHE =os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "scorecard.json")
+CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "scorecard.json")
 CACHE_VERSION = 1  # bump when build_record changes, so cached questions are read again
 UNSCORED = {"annulled", "ambiguous"}
 QUANTILES = (0.1, 0.5, 0.9)
@@ -435,7 +437,66 @@ def price_section(records: list[dict]) -> list[str]:
     return lines
 
 
-def report(records: list[dict], failed: int, today: str, windows: dict[str, list[dict]] | None = None) -> str:
+def shadow_section(records: list[dict], shadow_rows: list[dict]) -> list[str]:
+    """The agent candidate against the live bot, on the same resolved questions."""
+    if not shadow_rows:
+        return []
+    by_post = {r["post_id"]: r for r in records if r["final"] is not None}
+    pairs = []
+    for row in shadow_rows:
+        record = by_post.get(row["post_id"])
+        forecast = parse_forecast(row["forecast"], record["type"], record.get("options")) if record else None
+        if forecast is not None:
+            pairs.append((record, forecast))
+    lines = [
+        "## Agent candidate against the live bot",
+        f"{len(shadow_rows)} shadow forecast(s) so far, {len(pairs)} on resolved questions. + means the agent did "
+        "better. Switch the live bot when binary and multiple choice show +3 or better over 40 or more questions.",
+        "",
+    ]
+    for title, kinds in (
+        ("Binary and multiple choice, log score x100 per question", {"binary", "choice"}),
+        ("Numeric and date, quantile loss as % of the range", {"range"}),
+    ):
+        gains = [gain(forecast, record["final"], record) for record, forecast in pairs if family(record["type"]) in kinds]
+        if gains:
+            average, spread = summary(gains)
+            lines.append(f"- {title}: {average} over {len(gains)} [80% interval {spread}]")
+    costs = [row["research_cost"] for row in shadow_rows if row.get("research_cost")]
+    if costs:
+        lines.append(f"- Agent research cost: ${mean(costs):.3f} a question, {len(costs)} measured")
+    return lines
+
+
+def calibration_test_section(records: list[dict]) -> list[str]:
+    """Platt scaling and caps, each scored only on questions it was not fitted on."""
+    pairs = [(r["final"], r["resolution"] == "yes") for r in records if family(r["type"]) == "binary" and r["final"] is not None]
+    if not pairs:
+        return []
+    a, b = calibration.fit(pairs)
+    lines = [
+        "## Calibration test [yes/no questions]",
+        f"{len(pairs)} resolved. A correction goes live only when it improves scores on questions it was not "
+        f"fitted on, over {calibration.MIN_QUESTIONS} or more. + means it would have helped.",
+        "",
+        "| Correction | Score change per question | 80% interval |",
+        "|---|---|---|",
+    ]
+    lines.append(f"| Platt scaling [fitted a {a:.2f}, b {b:+.2f}] | {' | '.join(summary(calibration.leave_one_out(pairs)))} |")
+    for floor, ceiling in calibration.CAPS:
+        lines.append(f"| Cap at {floor:.0%}-{ceiling:.0%} | {' | '.join(summary(calibration.cap_gains(pairs, floor, ceiling)))} |")
+    if len(pairs) < calibration.MIN_QUESTIONS:
+        lines.append(f"\nToo few to act on: {len(pairs)} of {calibration.MIN_QUESTIONS}.")
+    return lines
+
+
+def report(
+    records: list[dict],
+    failed: int,
+    today: str,
+    windows: dict[str, list[dict]] | None = None,
+    shadow_rows: list[dict] | None = None,
+) -> str:
     lines = [f"# nelsk scorecard - {today}"]
     if windows:
         lines += [""] + coverage_section(windows)
@@ -450,34 +511,47 @@ def report(records: list[dict], failed: int, today: str, windows: dict[str, list
         unread = sum(1 for r in records if r["final"] is None)
         if unread:
             lines.append(f"The final forecast could not be read from the comment on {unread} of them.")
-        for section in (field_section, calibration_section, labs_section, price_section):
+        for section in (field_section, calibration_section, labs_section, price_section, calibration_test_section):
             part = section(records)
             if part:
                 lines += [""] + part
+    part = shadow_section(records, shadow_rows or [])
+    if part:
+        lines += [""] + part
     if failed:
         lines.append(f"\n{failed} question(s) could not be fetched from Metaculus on this run.")
     return "\n".join(lines)
+
+
+def load_cache(path) -> dict:
+    """Cached resolved questions, or empty when the file is missing or from an older build_record."""
+    try:
+        with open(path) as file:
+            saved = json.load(file)
+    except (OSError, ValueError):
+        return {}
+    return saved["questions"] if saved.get("version") == CACHE_VERSION else {}
+
+
+def save_cache(path, cache: dict) -> None:
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    with open(path, "w") as file:
+        json.dump({"version": CACHE_VERSION, "questions": cache}, file)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--json", help="Also write the scored questions to this file")
     args = parser.parse_args()
-    cache = {}
-    if os.path.exists(CACHE):
-        with open(CACHE) as file:
-            saved = json.load(file)
-        if saved.get("version") == CACHE_VERSION:
-            cache = saved["questions"]
+    cache = load_cache(CACHE)
     client = MetaculusClient()
     headers = {"Authorization": f"Token {os.environ['METACULUS_TOKEN']}"}
     comments = bot_comment_index(headers, client.get_current_user_id())
     records, failed = collect(client, headers, comments, cache)
-    os.makedirs(os.path.dirname(CACHE), exist_ok=True)
-    with open(CACHE, "w") as file:
-        json.dump({"version": CACHE_VERSION, "questions": cache}, file)
+    save_cache(CACHE, cache)
     now = datetime.now(timezone.utc)
-    text = report(records, failed, now.date().isoformat(), coverage(headers, set(comments), now))
+    windows = coverage(headers, set(comments), now)
+    text = report(records, failed, now.date().isoformat(), windows, shadow.load_rows())
     print(text)
     if os.getenv("GITHUB_STEP_SUMMARY"):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as file:

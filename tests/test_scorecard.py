@@ -145,6 +145,31 @@ def test_report_covers_the_field_calibration_and_labs():
     assert "## Price model" not in text
 
 
+def test_shadow_section_pairs_the_agent_with_the_live_bot():
+    records = [
+        binary(20, "yes", "40%", [], 3.0),
+        binary(21, "no", "30%", [], 5.0),
+    ]
+    shadow_rows = [
+        {"post_id": 20, "forecast": "60%", "research_cost": 0.05},  # closer to yes: agent better
+        {"post_id": 21, "forecast": "20%", "research_cost": 0.07},  # closer to no: agent better
+        {"post_id": 22, "forecast": "50%"},  # not resolved yet
+    ]
+    text = report(records, failed=0, today="2026-11-02", shadow_rows=shadow_rows)
+    assert "3 shadow forecast(s) so far, 2 on resolved questions" in text
+    line = next(l for l in text.splitlines() if l.startswith("- Binary and multiple choice"))
+    assert float(line.split(":")[1].split()[0]) > 0
+    assert "Agent research cost: $0.060 a question" in text
+
+
+def test_calibration_test_section_scores_held_out_corrections():
+    records = [binary(30 + i, "yes" if i % 3 == 0 else "no", "20%", [], 1.0) for i in range(9)]
+    text = report(records, failed=0, today="2026-11-02")
+    assert "## Calibration test [yes/no questions]" in text
+    assert "| Platt scaling [fitted a" in text and "| Cap at 5%-95% |" in text
+    assert "Too few to act on: 9 of 50." in text
+
+
 def test_report_with_nothing_resolved():
     assert "No resolved tournament questions yet." in report([], failed=0, today="2026-10-06")
 

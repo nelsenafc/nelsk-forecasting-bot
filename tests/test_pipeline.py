@@ -24,6 +24,7 @@ from forecasting_tools import (
 from forecasting_tools.data_models.multiple_choice_report import PredictedOption
 
 import forecaster
+import history
 import markets
 import price_model
 import resolution_sources
@@ -108,6 +109,7 @@ def offline(monkeypatch):
     monkeypatch.setattr(forecaster, "structure_output", fake_structure_output)
     monkeypatch.setattr(markets, "search_all", lambda queries, per_source_limit=5: [QUOTE])
     monkeypatch.setattr(resolution_sources, "read_sources", lambda question: {})
+    monkeypatch.setattr(history, "load", lambda: [])
     for name in ("ASKNEWS_API_KEY", "ASKNEWS_CLIENT_ID", "ASKNEWS_SECRET"):
         monkeypatch.delenv(name, raising=False)
 
@@ -202,6 +204,28 @@ def test_resolution_source_reaches_the_research(monkeypatch):
     assert "--- Page: https://www.bi.go.id/rate ---" in seen["prompt"]
     assert "## Resolution source, read" in report.explanation
     assert "set on 2026-10-21" in report.explanation
+
+
+def test_similar_past_questions_reach_the_research(monkeypatch):
+    past = {
+        "post_id": 99,
+        "question": "Will Bank Indonesia cut its policy rate in September 2026?",
+        "type": "Binary",
+        "resolution": "no",
+        "our_forecast": "35%",
+        "peer_score": 6.0,
+        "resolved_on": "2026-09-18",
+    }
+    monkeypatch.setattr(history, "load", lambda: [past])
+    question = BinaryQuestion(
+        question_text="Will Bank Indonesia cut its policy rate in November 2026?",
+        id_of_post=7,
+        page_url="https://www.metaculus.com/questions/7/",
+        **COMMON,
+    )
+    report = asyncio.run(make_bot().forecast_question(question))
+    assert "How similar past questions resolved" in report.explanation
+    assert "resolved no; the bot forecast 35%; peer score +6" in report.explanation
 
 
 def test_bot_refuses_to_forecast_blind(monkeypatch):
