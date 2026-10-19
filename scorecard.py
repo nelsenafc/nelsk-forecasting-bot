@@ -284,8 +284,9 @@ def windows_from_posts(
 
 
 def tournament_slugs(now: datetime, days: int = COVERAGE_DAYS) -> dict[str, list[str]]:
-    """Slugs to read per tournament. "minibench" points only at the current round, so the
-    rounds that could hold recent windows are added by their start date."""
+    """Slugs to read per tournament. "minibench" points only at the current round, and a round
+    gets its start-date slug [minibench-2026-10-05] only once it has ended, so recent rounds are
+    added by date and coverage() skips any that don't exist yet."""
     rounds, start = [], MINIBENCH_FIRST_ROUND
     while start <= now.date():
         if start >= now.date() - timedelta(days=days + 14):
@@ -306,6 +307,8 @@ def coverage(headers: dict, forecast_posts: set[int], now: datetime) -> dict[str
                 params={"tournaments": slug, "statuses": ["closed", "resolved"], "order_by": "-open_time", "limit": 100},
                 timeout=30,
             )
+            if response.status_code in (400, 404):  # a round that hasn't been given its dated slug yet
+                continue
             response.raise_for_status()
             posts.update({post["id"]: post for post in response.json().get("results", [])})
         found[name] = windows_from_posts(list(posts.values()), forecast_posts, now)
@@ -559,7 +562,11 @@ def main() -> None:
     records, failed = collect(client, headers, comments, cache)
     save_cache(CACHE, cache)
     now = datetime.now(timezone.utc)
-    windows = coverage(headers, set(comments), now)
+    try:
+        windows = coverage(headers, set(comments), now)
+    except requests.RequestException as error:  # the coverage count must never take the scores down with it
+        print(f"Coverage skipped: {type(error).__name__}")
+        windows = None
     text = report(records, failed, now.date().isoformat(), windows, shadow.load_rows())
     print(text)
     if os.getenv("GITHUB_STEP_SUMMARY"):

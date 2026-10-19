@@ -18,6 +18,33 @@ from scorecard import (
 )
 
 
+def test_coverage_skips_a_round_that_has_no_dated_slug_yet(monkeypatch):
+    import scorecard
+
+    now = datetime(2026, 10, 19, 13, 0, tzinfo=timezone.utc)
+    post = {"id": 5, "open_time": "2026-10-19T02:00:00Z", "scheduled_close_time": "2026-10-19T05:00:00Z"}
+
+    class Response:
+        def __init__(self, status, results=()):
+            self.status_code, self.results = status, list(results)
+
+        def raise_for_status(self):
+            if self.status_code >= 400:
+                raise scorecard.requests.HTTPError(str(self.status_code))
+
+        def json(self):
+            return {"results": self.results}
+
+    def fake_get(url, headers, params, timeout):
+        if params["tournaments"] == "minibench-2026-10-19":
+            return Response(400)
+        return Response(200, [post] if params["tournaments"] == "minibench" else [])
+
+    monkeypatch.setattr(scorecard.requests, "get", fake_get)
+    windows = scorecard.coverage({}, {5}, now)
+    assert [w["post_id"] for w in windows["MiniBench"]] == [5]
+
+
 def test_coverage_reads_recent_minibench_rounds_by_name():
     at = lambda day: datetime(2026, 10, day, 3, 0, tzinfo=timezone.utc)
     assert tournament_slugs(at(17))["MiniBench"] == ["minibench", "minibench-2026-10-05"]
