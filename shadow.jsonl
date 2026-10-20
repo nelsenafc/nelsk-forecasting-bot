@@ -43,3 +43,4 @@
 {"post_id": 46172, "type": "Binary", "closed_at": "2026-10-20T18:28:31+00:00", "made_at": "2026-10-20T19:06:30+00:00", "model": "openrouter/google/gemini-3.8-flash", "forecast": "57%", "tool_calls": 10, "research_cost": 0.1646}
 {"post_id": 46173, "type": "Binary", "closed_at": "2026-10-20T19:38:24+00:00", "made_at": "2026-10-20T20:04:33+00:00", "model": "openrouter/google/gemini-3.8-flash", "forecast": "60%", "tool_calls": 10, "research_cost": 0.1474}
 {"post_id": 46174, "type": "Numeric", "closed_at": "2026-10-20T20:21:32+00:00", "made_at": "2026-10-20T21:06:10+00:00", "model": "openrouter/google/gemini-3.8-flash", "forecast": "median 17.0 [80% range 12.7 to 23.7]", "tool_calls": 10, "research_cost": 0.1524}
+{"post_id": 46175, "type": "Binary", "closed_at": "2026-10-20T22:11:51+00:00", "made_at": "2026-10-20T23:06:32+00:00", "model": "openrouter/google/gemini-3.8-flash", "forecast": "87%", "tool_calls": 10, "research_cost": 0.1397}
