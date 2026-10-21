@@ -1,6 +1,24 @@
 {
- "updated_at": "2026-10-20T17:09:02+00:00",
+ "updated_at": "2026-10-21T00:12:51+00:00",
  "questions": [
+  {
+   "post_id": 46069,
+   "question": "Will the FAA type-certify the Boeing 737 MAX 10 before 2027?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "95%",
+   "peer_score": 13.552491044188447,
+   "resolved_on": "2026-10-20"
+  },
+  {
+   "post_id": 45951,
+   "question": "Will the winning pumpkin at the 2026 Terminator weigh-off be greater than or equal to 2,000 pounds?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "22%",
+   "peer_score": 32.07535823751187,
+   "resolved_on": "2026-10-20"
+  },
   {
    "post_id": 45948,
    "question": "Will Russian and Ukrainian officials hold a round of negotiations on an energy-infrastructure ceasefire between October 15 and October 17, 2026?",
