@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-23T06:09:44+00:00",
+ "updated_at": "2026-10-23T13:10:15+00:00",
  "questions": [
   {
    "post_id": 46069,
@@ -9,6 +9,15 @@
    "our_forecast": "95%",
    "peer_score": 13.552491044188447,
    "resolved_on": "2026-10-20"
+  },
+  {
+   "post_id": 45950,
+   "question": "How many confirmed measles cases will Peru's CDC-MINSA report nationally for 2026 as of mid-October 2026?",
+   "type": "Numeric",
+   "resolution": 2664.0,
+   "our_forecast": "median 2763 [80% range 2619 to 2984]",
+   "peer_score": 16.032767960695967,
+   "resolved_on": "2026-10-21"
   },
   {
    "post_id": 45951,
