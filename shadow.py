@@ -31,7 +31,9 @@ CLOSED_WITHIN = timedelta(hours=int(os.getenv("SHADOW_CLOSED_WITHIN_HOURS", "6")
 MAX_PER_RUN = int(os.getenv("SHADOW_MAX_PER_RUN", "3"))
 # About $0.25 each, so 6 a day keeps the test near $1.50 a day and still reaches 40 paired
 # resolved questions by early November. MiniBench goes first because it resolves within weeks.
-MAX_PER_DAY = int(os.getenv("SHADOW_MAX_PER_DAY", "6"))
+# Paused on 23 Oct: the test already holds 40 MiniBench forecasts that resolve by 2 Nov, all the
+# 2 Nov comparison needs, and credit is short. Set back to 6 to resume after that read.
+MAX_PER_DAY = int(os.getenv("SHADOW_MAX_PER_DAY", "0"))
 # MiniBench round 2 opens on 19 Oct with a batch of about 45 questions that resolve together,
 # around 29 Oct-1 Nov. Taking about 25 of them [about $5] brings the 40-question answer about a
 # week sooner. The higher cap expires on its own.
