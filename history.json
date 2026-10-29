@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-29T16:11:33+00:00",
+ "updated_at": "2026-10-29T23:12:42+00:00",
  "questions": [
   {
    "post_id": 46069,
@@ -9,6 +9,15 @@
    "our_forecast": "95%",
    "peer_score": 13.552491044188447,
    "resolved_on": "2026-10-20"
+  },
+  {
+   "post_id": 46053,
+   "question": "Will under 58% of the contiguous U.S. be in drought on October 27, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "86%",
+   "peer_score": 28.54350306380378,
+   "resolved_on": "2026-10-29"
   },
   {
    "post_id": 45950,
