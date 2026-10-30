@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-30T13:13:42+00:00",
+ "updated_at": "2026-10-30T20:13:38+00:00",
  "questions": [
   {
    "post_id": 46069,
@@ -18,6 +18,15 @@
    "our_forecast": "86%",
    "peer_score": 28.54350306380378,
    "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46052,
+   "question": "How many daily average PLA incursions into Taiwan's ADIZ will occur for the week of October 19-25, 2026?",
+   "type": "Count",
+   "resolution": 4.857142858,
+   "our_forecast": "median 6.54 [80% range 3.3 to 13.7]",
+   "peer_score": 14.646647431526747,
+   "resolved_on": "2026-10-30"
   },
   {
    "post_id": 45950,
