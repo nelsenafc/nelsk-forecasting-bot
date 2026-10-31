@@ -1,6 +1,24 @@
 {
- "updated_at": "2026-10-31T10:12:07+00:00",
+ "updated_at": "2026-10-31T17:12:25+00:00",
  "questions": [
+  {
+   "post_id": 46176,
+   "question": "What will be the closing price of Bitcoin (BTC) on October 30, 2026?",
+   "type": "Numeric",
+   "resolution": 77200.0,
+   "our_forecast": "median 8.271e+04 [80% range 7.681e+04 to 8.877e+04]",
+   "peer_score": -9.085859080785015,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46175,
+   "question": "Will the USDA reopen the Columbus, New Mexico port of entry to Mexican cattle imports before October 31, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "81%",
+   "peer_score": 75.89836534107751,
+   "resolved_on": "2026-10-29"
+  },
   {
    "post_id": 46069,
    "question": "Will the FAA type-certify the Boeing 737 MAX 10 before 2027?",
@@ -9,6 +27,411 @@
    "our_forecast": "95%",
    "peer_score": 13.552491044188447,
    "resolved_on": "2026-10-20"
+  },
+  {
+   "post_id": 46170,
+   "question": "Will Bitcoin be at or above $85,000 at the start of October 31, 2026 (UTC)?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "22%",
+   "peer_score": 10.558578801687457,
+   "resolved_on": "2026-10-31"
+  },
+  {
+   "post_id": 46169,
+   "question": "Will the Election Commission of India publish Andhra Pradesh's final SIR electoral roll on October 29 or 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "66%",
+   "peer_score": -12.524700089956076,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46168,
+   "question": "Will the FDA approve INOVIO's INO-3107 for recurrent respiratory papillomatosis on or before October 30, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "54%",
+   "peer_score": -4.538413069032967,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46167,
+   "question": "Will CNA-represented Kaiser Permanente nurses in California be on strike on October 29 or 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "5%",
+   "peer_score": 5.83539720265801,
+   "resolved_on": "2026-10-31"
+  },
+  {
+   "post_id": 46165,
+   "question": "Will the Ohio Supreme Court dispose of the appeal in Borovicanin v. NCAA (No. 2026-1353) on the merits by October 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "29%",
+   "peer_score": 6.168029300410991,
+   "resolved_on": "2026-10-31"
+  },
+  {
+   "post_id": 46164,
+   "question": "How many advance votes will have been cast in New Zealand's 2026 general election through 29 October 2026 (the fourth day of advance voting)?",
+   "type": "Numeric",
+   "resolution": 452600.0,
+   "our_forecast": "median 3.075e+05 [80% range 2.365e+05 to 3.974e+05]",
+   "peer_score": -14.013438247929235,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46161,
+   "question": "How many AIS-visible commercial ships will the hormuz.now tracker count crossing the Strait of Hormuz on October 29, 2026?",
+   "type": "Count",
+   "resolution": 11.0,
+   "our_forecast": "median 4.15 [80% range 0.0219 to 14.8]",
+   "peer_score": -11.48829647784126,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46162,
+   "question": "Will Kaiser Permanente and the California Nurses Association reach a tentative agreement on a new Northern California contract before October 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "6%",
+   "peer_score": 7.333342928179312,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46160,
+   "question": "Will another merchant vessel be attacked in the Black Sea off Bulgaria or Romania on October 29, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "17%",
+   "peer_score": 13.132321689878125,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46158,
+   "question": "How many countries will ECDC's West Nile virus weekly report published around 30 October 2026 list as affected during the 2026 season?",
+   "type": "Count",
+   "resolution": 20.0,
+   "our_forecast": "median 19.6 [80% range 18.7 to 21.3]",
+   "peer_score": 2.1198677859427404,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46157,
+   "question": "Will the United States authorize the transfer of Tomahawk cruise missiles to Ukraine by October 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "5%",
+   "peer_score": 2.47418262845926,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46156,
+   "question": "Will the South Korean won close weaker than 1,340 per US dollar on October 29, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "29%",
+   "peer_score": 10.575618762756152,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46155,
+   "question": "Will Israel or the United States conduct a military strike on Iranian territory between October 29 and October 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "11%",
+   "peer_score": 3.900884798883563,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46154,
+   "question": "What will the official BCRA wholesale USD/ARS reference exchange rate (d\u00f3lar mayorista, Comunicaci\u00f3n A 3500) be on October 29, 2026?",
+   "type": "Numeric",
+   "resolution": 1539.6,
+   "our_forecast": "median 1524 [80% range 1494 to 1568]",
+   "peer_score": 6.366220118849119,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46153,
+   "question": "How many of Japan's 47 prefectures will be at the influenza warning level (\u226530 cases per sentinel institution) in the MHLW weekly report for the week ending October 25, 2026?",
+   "type": "Count",
+   "resolution": 0.0,
+   "our_forecast": "median 2.05 [80% range -0.0441 to 9.23]",
+   "peer_score": 51.04744501639577,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46152,
+   "question": "How many Japanese educational facilities will the MHLW report as fully or partially closed due to influenza-like illness this season, cumulative through the week ending October 25, 2026?",
+   "type": "Numeric",
+   "resolution": 7190.0,
+   "our_forecast": "median 1.007e+04 [80% range 7945 to 1.2e+04]",
+   "peer_score": -90.48609370011405,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46151,
+   "question": "How many named storms will the 2026 Pacific hurricane season have recorded as of October 29, 2026?",
+   "type": "Count",
+   "resolution": 24.0,
+   "our_forecast": "median 23.1 [80% range 22.3 to 24.3]",
+   "peer_score": 6.932424548692413,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46150,
+   "question": "Will Russia and Ukraine have a Black Sea maritime ceasefire or safe-passage agreement in effect as of October 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "5%",
+   "peer_score": 3.7675293506207,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46149,
+   "question": "Will the openai/math repository report more than 300 top-line results formalized in Lean as of October 29, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "30%",
+   "peer_score": 7.817732326475596,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46148,
+   "question": "How many attack drones will Russia launch at Ukraine on the night of October 29\u201330, 2026?",
+   "type": "Numeric",
+   "resolution": 113.0,
+   "our_forecast": "median 188.8 [80% range 98.9 to 487.2]",
+   "peer_score": 3.834599247593322,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46147,
+   "question": "Will the Supreme Court of India order a halt to the Special Intensive Revision of electoral rolls before October 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "9%",
+   "peer_score": 7.387501714838787,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46146,
+   "question": "How many of the 18 crew still missing from the HS Dignity and Wine Trader Black Sea attacks will have their bodies recovered by October 29, 2026?",
+   "type": "Count",
+   "resolution": 0.0,
+   "our_forecast": "median 0.961 [80% range -0.269 to 6.77]",
+   "peer_score": 7.862137776810943,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46145,
+   "question": "What will the Brent crude oil front-month futures settlement price be on October 29, 2026?",
+   "type": "Numeric",
+   "resolution": 114.88,
+   "our_forecast": "median 107.8 [80% range 98.3 to 117.2]",
+   "peer_score": -0.970119732079845,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46144,
+   "question": "What will Amazon report as its Q3 2026 net sales?",
+   "type": "Numeric",
+   "resolution": 201.94,
+   "our_forecast": "median 203.5 [80% range 199.6 to 208.1]",
+   "peer_score": 3.27750730771628,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46143,
+   "question": "How will Amazon's stock close on October 30, 2026, the first full trading day after its Q3 report?",
+   "type": "Multiple choice",
+   "resolution": "$235.00 to less than $250.00",
+   "our_forecast": "Less than $235.00 20% / $235.00 to less than $250.00 22% / $250.00 to less than $265.00 27% / $265.00 to less than $280.00 18% / $280.00 or more 12%",
+   "peer_score": 3.269159108501087,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46142,
+   "question": "How many advance votes will the NZ Electoral Commission report for Thursday 29 October 2026 (daily count, day 4 of advance voting)?",
+   "type": "Numeric",
+   "resolution": 143200.0,
+   "our_forecast": "median 1.051e+05 [80% range 7.421e+04 to 1.449e+05]",
+   "peer_score": 19.873922134705168,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46141,
+   "question": "What will U.S. wheat net export sales be in the USDA Weekly Export Sales report released October 29, 2026?",
+   "type": "Numeric",
+   "resolution": 849800.0,
+   "our_forecast": "median 3.427e+05 [80% range 1.698e+05 to 5.821e+05]",
+   "peer_score": 1.1478249735827932,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46140,
+   "question": "How many new locally acquired dengue cases will the Week 42 FDOH arbovirus report (October 18\u201324, 2026) show for Florida?",
+   "type": "Count",
+   "resolution": 60.0,
+   "our_forecast": "median 66.7 [80% range 35.6 to 104.8]",
+   "peer_score": 4.763092857549583,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46139,
+   "question": "What will Argentina's country risk (riesgo pa\u00eds, JP Morgan EMBI+) be at the close on October 29, 2026?",
+   "type": "Numeric",
+   "resolution": 741.0,
+   "our_forecast": "median 641.1 [80% range 563.4 to 738.6]",
+   "peer_score": 2.1788753784203783,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46138,
+   "question": "What year-over-year revenue growth rate will Amazon report for its AWS segment in Q3 2026?",
+   "type": "Numeric",
+   "resolution": 39.3,
+   "our_forecast": "median 39.9 [80% range 33.4 to 46.4]",
+   "peer_score": -1.0989997916830672,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46137,
+   "question": "Will the White House have a named permanent press secretary succeeding Katie Zacharia as of October 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "14%",
+   "peer_score": 13.440214431310357,
+   "resolved_on": "2026-10-31"
+  },
+  {
+   "post_id": 46136,
+   "question": "How many 'red alert' dengue clusters (10+ cases) will Singapore's NEA list as active on 29 October 2026?",
+   "type": "Count",
+   "resolution": 3.0,
+   "our_forecast": "median 2.61 [80% range 0.731 to 4.68]",
+   "peer_score": 12.655976238765941,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46135,
+   "question": "Will Trump and Zelensky speak directly \u2014 by phone or in person \u2014 on October 29 or 30, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "12%",
+   "peer_score": 10.122930196640793,
+   "resolved_on": "2026-10-31"
+  },
+  {
+   "post_id": 46133,
+   "question": "What cumulative total of locally acquired dengue cases in Florida in 2026 will the FDOH Week 42 Arbovirus Surveillance Report show?",
+   "type": "Numeric",
+   "resolution": 485.0,
+   "our_forecast": "median 485.3 [80% range 418 to 567.8]",
+   "peer_score": 106.15389862651696,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46134,
+   "question": "How many dengue cases will Singapore's NEA report for the epidemiological week ending Saturday 24 October 2026?",
+   "type": "Count",
+   "resolution": 61.0,
+   "our_forecast": "median 70.9 [80% range 51 to 93.2]",
+   "peer_score": 16.806938259825134,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46132,
+   "question": "What will the US core PCE year-over-year inflation rate for September 2026 be, released October 29, 2026?",
+   "type": "Count",
+   "resolution": 3.1,
+   "our_forecast": "median 3.09 [80% range 2.94 to 3.27]",
+   "peer_score": 16.287691323814755,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46131,
+   "question": "Will the openai/math repository's history log show more than three total withdrawn manuscripts as of October 29, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "28%",
+   "peer_score": 2.1120688474544997,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46130,
+   "question": "Will Brent crude close above $104 per barrel on October 29, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "71%",
+   "peer_score": 10.87100922129275,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46129,
+   "question": "How many Florida counties will be listed as reporting locally acquired dengue in 2026 in the FDOH Arbovirus Surveillance Report published on or around October 29, 2026?",
+   "type": "Count",
+   "resolution": 12.0,
+   "our_forecast": "median 8.76 [80% range 7.74 to 10.4]",
+   "peer_score": -62.1266601275647,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46128,
+   "question": "Will the 2026 Eastern Pacific hurricane season's accumulated cyclone energy exceed 350 units as of October 29, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "83%",
+   "peer_score": 53.6240678856532,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46127,
+   "question": "What will CoreWeave (CRWV) stock close at on October 29, 2026?",
+   "type": "Numeric",
+   "resolution": 60.74,
+   "our_forecast": "median 61.3 [80% range 47.7 to 79.9]",
+   "peer_score": 15.042548083583426,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46126,
+   "question": "What will be the closing level of South Korea's KOSPI index on October 29, 2026?",
+   "type": "Numeric",
+   "resolution": 5938.0,
+   "our_forecast": "median 5629 [80% range 4929 to 6396]",
+   "peer_score": -0.23562581231356802,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46123,
+   "question": "Will the 2026 World Series require a Game 6?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "58%",
+   "peer_score": -4.72647102959695,
+   "resolved_on": "2026-10-28"
+  },
+  {
+   "post_id": 46124,
+   "question": "What annualized real GDP growth will the BEA report in its advance estimate for Q3 2026, released October 29, 2026?",
+   "type": "Count",
+   "resolution": 3.4,
+   "our_forecast": "median 3.3 [80% range 1.86 to 4.69]",
+   "peer_score": 8.828763840282791,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46054,
+   "question": "Will Ken Paxton lead James Talarico in the Texas Senate race polling on October 31, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "21%",
+   "peer_score": 8.976505105802161,
+   "resolved_on": "2026-10-31"
   },
   {
    "post_id": 46053,
