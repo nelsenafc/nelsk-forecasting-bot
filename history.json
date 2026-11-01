@@ -1,6 +1,33 @@
 {
- "updated_at": "2026-11-01T07:09:06+00:00",
+ "updated_at": "2026-11-01T13:22:06+00:00",
  "questions": [
+  {
+   "post_id": 46179,
+   "question": "Will Fernando Cerimedo be released from preventive detention in Bolivia by October 31, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "5%",
+   "peer_score": 5.234884193287098,
+   "resolved_on": "2026-11-01"
+  },
+  {
+   "post_id": 46178,
+   "question": "What will the front-month Brent crude oil futures settlement price be on October 30, 2026?",
+   "type": "Numeric",
+   "resolution": 113.43,
+   "our_forecast": "median 109.7 [80% range 100.1 to 118.7]",
+   "peer_score": 29.44486385562396,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46177,
+   "question": "How many active New World screwworm cases will Mexico's Senasica dashboard report in late October 2026?",
+   "type": "Numeric",
+   "resolution": 2037.0,
+   "our_forecast": "median 1941 [80% range 1778 to 2112]",
+   "peer_score": -3.3705716942649837,
+   "resolved_on": "2026-10-28"
+  },
   {
    "post_id": 46176,
    "question": "What will be the closing price of Bitcoin (BTC) on October 30, 2026?",
@@ -20,6 +47,33 @@
    "resolved_on": "2026-10-29"
   },
   {
+   "post_id": 46174,
+   "question": "What will Japan's national average of influenza cases per sentinel medical institution be for the week ending October 25, 2026?",
+   "type": "Numeric",
+   "resolution": 9.49,
+   "our_forecast": "median 17.4 [80% range 11.9 to 27.2]",
+   "peer_score": -37.0215255011225,
+   "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46173,
+   "question": "Will the Milwaukee Brewers win the 2026 World Series?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "61%",
+   "peer_score": 1.589157187884398,
+   "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46172,
+   "question": "Will New Zealand beat Fiji by more than 12 points in their 2026 Rugby League World Cup pool match?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "55%",
+   "peer_score": 2.7497782115020595,
+   "resolved_on": "2026-10-31"
+  },
+  {
    "post_id": 46069,
    "question": "Will the FAA type-certify the Boeing 737 MAX 10 before 2027?",
    "type": "Binary",
@@ -27,6 +81,15 @@
    "our_forecast": "95%",
    "peer_score": 13.552491044188447,
    "resolved_on": "2026-10-20"
+  },
+  {
+   "post_id": 46171,
+   "question": "Will Lee Hwa-young's legal team have filed a retrial petition in the Ssangbangwool North Korea remittance case with the Suwon High Court as of October 31, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "77%",
+   "peer_score": -12.437373560144037,
+   "resolved_on": "2026-11-01"
   },
   {
    "post_id": 46170,
@@ -83,6 +146,15 @@
    "resolved_on": "2026-10-30"
   },
   {
+   "post_id": 46163,
+   "question": "Will CBD COP17 in Yerevan be suspended without completing its agenda, as happened at COP16 in Cali?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "16%",
+   "peer_score": 5.36061165483868,
+   "resolved_on": "2026-10-31"
+  },
+  {
    "post_id": 46161,
    "question": "How many AIS-visible commercial ships will the hormuz.now tracker count crossing the Strait of Hormuz on October 29, 2026?",
    "type": "Count",
@@ -108,6 +180,15 @@
    "our_forecast": "17%",
    "peer_score": 13.132321689878125,
    "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 46159,
+   "question": "Will a US halt of Ukraine arms deliveries under NATO's PURL mechanism be confirmed before November 1, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "17%",
+   "peer_score": 5.79297068954317,
+   "resolved_on": "2026-11-01"
   },
   {
    "post_id": 46158,
@@ -461,6 +542,24 @@
    "resolved_on": "2026-10-21"
   },
   {
+   "post_id": 45957,
+   "question": "Will any North American country have a CDC travel advisory issued in October 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "42%",
+   "peer_score": 28.702694113188862,
+   "resolved_on": "2026-11-01"
+  },
+  {
+   "post_id": 45956,
+   "question": "Where will the great white shark Percy be on November 1, 2026?",
+   "type": "Multiple choice",
+   "resolution": "Massachusetts",
+   "our_forecast": "Nova Scotia 26% / Maine 7% / Massachusetts 17% / New York 8% / New Jersey 7% / Any landmass south of New Jersey 23% / Anywhere else 13%",
+   "peer_score": 40.22892897138421,
+   "resolved_on": "2026-11-01"
+  },
+  {
    "post_id": 45955,
    "question": "What will be the official water level of Panama's Gatun Lake on October 31, 2026?",
    "type": "Count",
@@ -468,6 +567,24 @@
    "our_forecast": "median 85.5 [80% range 84.9 to 85.5]",
    "peer_score": 65.86973772620952,
    "resolved_on": "2026-10-31"
+  },
+  {
+   "post_id": 45954,
+   "question": "How many clinicaltrials.gov studies with an LLM-based Chatbot as the intervention/treatment will be recruiting on November 1, 2026?",
+   "type": "Multiple choice",
+   "resolution": ">4",
+   "our_forecast": "0 or 1 42% / 2 27% / 3 12% / 4 7% / >4 13%",
+   "peer_score": 9.329689711950609,
+   "resolved_on": "2026-11-01"
+  },
+  {
+   "post_id": 45952,
+   "question": "How many license plate readers mapped in the USA will be displayed by DeFlock.org on November 1, 2026?",
+   "type": "Numeric",
+   "resolution": 145198.0,
+   "our_forecast": "median 1.481e+05 [80% range 1.422e+05 to 1.578e+05]",
+   "peer_score": 36.287732957840014,
+   "resolved_on": "2026-11-01"
   },
   {
    "post_id": 45951,
