@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-10-31T17:12:25+00:00",
+ "updated_at": "2026-11-01T00:09:10+00:00",
  "questions": [
   {
    "post_id": 46176,
@@ -459,6 +459,15 @@
    "our_forecast": "median 2763 [80% range 2619 to 2984]",
    "peer_score": 16.032767960695967,
    "resolved_on": "2026-10-21"
+  },
+  {
+   "post_id": 45955,
+   "question": "What will be the official water level of Panama's Gatun Lake on October 31, 2026?",
+   "type": "Count",
+   "resolution": 85.55,
+   "our_forecast": "median 85.5 [80% range 84.9 to 85.5]",
+   "peer_score": 65.86973772620952,
+   "resolved_on": "2026-10-31"
   },
   {
    "post_id": 45951,
