@@ -1,6 +1,15 @@
 {
- "updated_at": "2026-11-02T10:10:36+00:00",
+ "updated_at": "2026-11-02T17:11:01+00:00",
  "questions": [
+  {
+   "post_id": 46180,
+   "question": "Will Ukraine strike a Russian oil refinery between October 29 and October 31, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "54%",
+   "peer_score": -8.092209941635465,
+   "resolved_on": "2026-10-30"
+  },
   {
    "post_id": 46179,
    "question": "Will Fernando Cerimedo be released from preventive detention in Bolivia by October 31, 2026?",
@@ -540,6 +549,24 @@
    "our_forecast": "median 2763 [80% range 2619 to 2984]",
    "peer_score": 16.032767960695967,
    "resolved_on": "2026-10-21"
+  },
+  {
+   "post_id": 45959,
+   "question": "How many Falcon 9 or Falcon Heavy orbital launches will SpaceX have in the second half of October 2026?",
+   "type": "Multiple choice",
+   "resolution": "Five or Six",
+   "our_forecast": "Two or fewer 16% / Three or Four 41% / Five or Six 30% / Seven or more 14%",
+   "peer_score": 1.730801699912959,
+   "resolved_on": "2026-11-02"
+  },
+  {
+   "post_id": 45958,
+   "question": "How many mass shootings will the U.S. experience in October 2026?",
+   "type": "Count",
+   "resolution": 39.0,
+   "our_forecast": "median 42.7 [80% range 30.8 to 58.9]",
+   "peer_score": 14.485795148611748,
+   "resolved_on": "2026-11-02"
   },
   {
    "post_id": 45957,
