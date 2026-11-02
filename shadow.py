@@ -29,11 +29,14 @@ SHADOW_FILE = "shadow.jsonl"
 SHADOW_URL = "https://raw.githubusercontent.com/nelsenafc/nelsk-forecasting-bot/bot-data/shadow.jsonl"
 CLOSED_WITHIN = timedelta(hours=int(os.getenv("SHADOW_CLOSED_WITHIN_HOURS", "6")))
 MAX_PER_RUN = int(os.getenv("SHADOW_MAX_PER_RUN", "3"))
-# About $0.25 each, so 6 a day keeps the test near $1.50 a day and still reaches 40 paired
-# resolved questions by early November. MiniBench goes first because it resolves within weeks.
-# Paused on 23 Oct: the test already holds 40 MiniBench forecasts that resolve by 2 Nov, all the
-# 2 Nov comparison needs, and credit is short. Set back to 6 to resume after that read.
-MAX_PER_DAY = int(os.getenv("SHADOW_MAX_PER_DAY", "0"))
+# About $0.25 each, so 6 a day keeps the test near $1.50 a day. Paused 23 Oct-2 Nov while credit
+# was short, resumed after the 2 Nov top-up.
+MAX_PER_DAY = int(os.getenv("SHADOW_MAX_PER_DAY", "6"))
+# MiniBench only until the 14 Nov read: Fall questions resolve from mid-November into January, too
+# late to count, and paying for them would run credit down before the read. Yes/no and multiple
+# choice go first, because the switch rule is judged on those.
+TOURNAMENTS = os.getenv("SHADOW_TOURNAMENTS", "MiniBench").split(",")
+FIRST_TYPES = ("Binary", "Multiple choice")
 # MiniBench round 2 opens on 19 Oct with a batch of about 45 questions that resolve together,
 # around 29 Oct-1 Nov. Taking about 25 of them [about $5] brings the 40-question answer about a
 # week sooner. The higher cap expires on its own.
@@ -43,6 +46,11 @@ BURST = (datetime(2026, 10, 19, tzinfo=timezone.utc), datetime(2026, 10, 21, tzi
 def daily_cap(now: datetime) -> int:
     start, end, cap = BURST
     return cap if start <= now < end else MAX_PER_DAY
+
+
+def priority(question) -> tuple[bool, bool]:
+    """MiniBench before Fall, then yes/no and multiple choice before numeric and date."""
+    return tournament_name(question) != "MiniBench", type_name(question) not in FIRST_TYPES
 
 
 def read_rows(text: str) -> list[dict]:
@@ -61,7 +69,7 @@ def load_rows(path: Path | None = None) -> list[dict]:
 
 
 def due(client, headers: dict, done: set[int], now: datetime) -> list:
-    """Tournament questions the live bot forecast that closed within the window and have no shadow yet."""
+    """Questions from the shadowed tournaments that the live bot forecast, closed within the window and have no shadow yet."""
     # The bot comments while a question is open, at most 3 hours before it closes, so older comments are skipped unread.
     earliest = (now - CLOSED_WITHIN - timedelta(hours=4)).isoformat()
     found = []
@@ -71,7 +79,7 @@ def due(client, headers: dict, done: set[int], now: datetime) -> list:
         question = client.get_question_by_post_id(post_id)
         closed = question.close_time
         if (
-            tournament_name(question)
+            tournament_name(question) in TOURNAMENTS
             and question.state == QuestionState.CLOSED
             and closed is not None
             and now - CLOSED_WITHIN <= closed <= now
@@ -92,7 +100,7 @@ async def run(data_dir: Path, now: datetime | None = None, bot: AgentBot | None 
         return 0
     client = MetaculusClient()
     headers = {"Authorization": f"Token {os.environ['METACULUS_TOKEN']}"}
-    questions = sorted(due(client, headers, done, now), key=lambda q: tournament_name(q) != "MiniBench")[:room]
+    questions = sorted(due(client, headers, done, now), key=priority)[:room]
     bot = bot or AgentBot(publish_reports_to_metaculus=False, skip_previously_forecasted_questions=False)
 
     async def forecast(question):

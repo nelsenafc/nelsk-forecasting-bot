@@ -3,7 +3,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
 
-from forecasting_tools import BinaryQuestion
+from forecasting_tools import BinaryQuestion, NumericQuestion
 from forecasting_tools.data_models.questions import QuestionState
 
 import shadow
@@ -11,13 +11,13 @@ import shadow
 NOW = datetime(2026, 10, 20, 12, 0, tzinfo=timezone.utc)
 
 
-def question(post_id, state, closed_hours_ago):
+def question(post_id, state, closed_hours_ago, slug="minibench-2026-10-19"):
     return BinaryQuestion(
         question_text=f"Question {post_id}?",
         id_of_post=post_id,
         page_url=f"https://www.metaculus.com/questions/{post_id}/",
         state=state,
-        tournament_slugs=["minibench-2026-10-19"],
+        tournament_slugs=[slug],
         close_time=NOW - timedelta(hours=closed_hours_ago),
     )
 
@@ -27,6 +27,7 @@ QUESTIONS = {
     2: question(2, QuestionState.OPEN, -1),  # still open: never
     3: question(3, QuestionState.CLOSED, 10),  # closed too long ago
     4: question(4, QuestionState.CLOSED, 2),  # already shadowed
+    5: question(5, QuestionState.CLOSED, 1, "fall-futureeval-2026"),  # Fall: not until switched back on
 }
 COMMENTS = {post_id: {"created_at": (NOW - timedelta(hours=3)).isoformat()} for post_id in QUESTIONS}
 
@@ -54,6 +55,28 @@ def test_due_takes_only_recently_closed_unshadowed_questions(monkeypatch):
     monkeypatch.setattr(shadow, "bot_comment_index", lambda headers, bot_id: COMMENTS)
     found = shadow.due(FakeClient(), {}, done={4}, now=NOW)
     assert [q.id_of_post for q in found] == [1]
+
+
+def test_due_takes_fall_once_switched_back_on(monkeypatch):
+    monkeypatch.setattr(shadow, "bot_comment_index", lambda headers, bot_id: COMMENTS)
+    monkeypatch.setattr(shadow, "TOURNAMENTS", ["MiniBench", "Fall 2026"])
+    found = shadow.due(FakeClient(), {}, done={4}, now=NOW)
+    assert [q.id_of_post for q in found] == [1, 5]
+
+
+def test_minibench_then_yes_no_go_first():
+    numeric = NumericQuestion(
+        question_text="Question 6?",
+        id_of_post=6,
+        state=QuestionState.CLOSED,
+        tournament_slugs=["minibench-2026-10-19"],
+        upper_bound=10.0,
+        lower_bound=0.0,
+        open_upper_bound=True,
+        open_lower_bound=True,
+    )
+    picked = sorted([QUESTIONS[5], numeric, QUESTIONS[1]], key=shadow.priority)
+    assert [q.id_of_post for q in picked] == [1, 6, 5]
 
 
 def test_run_appends_one_row_per_shadow_forecast(monkeypatch, tmp_path):
