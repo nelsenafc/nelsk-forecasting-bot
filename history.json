@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-03T14:12:23+00:00",
+ "updated_at": "2026-11-03T21:13:20+00:00",
  "questions": [
   {
    "post_id": 46180,
@@ -18,6 +18,15 @@
    "our_forecast": "5%",
    "peer_score": 5.234884193287098,
    "resolved_on": "2026-11-01"
+  },
+  {
+   "post_id": 46191,
+   "question": "Who will be the largest Republican donor in the 2026 cycle, as of Election Day?",
+   "type": "Multiple choice",
+   "resolution": "Elon Musk",
+   "our_forecast": "Ben Horowitz & Marc Andreessen 2% / Elon Musk 90% / Jeff & Janine Yass 2% / Elizabeth & Richard Uihlein 2% / Miriam Adelson 2% / Other 2%",
+   "peer_score": 14.484393118894916,
+   "resolved_on": "2026-11-03"
   },
   {
    "post_id": 46178,
@@ -513,6 +522,24 @@
    "our_forecast": "median 3.3 [80% range 1.86 to 4.69]",
    "peer_score": 8.828763840282791,
    "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46057,
+   "question": "Will the price of regular unleaded gas in the U.S. reach $5 a gallon before election day 2026, according to AAA?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "3%",
+   "peer_score": 7.317170584489984,
+   "resolved_on": "2026-11-03"
+  },
+  {
+   "post_id": 46056,
+   "question": "Will there be a Florida gubernatorial debate before election day 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "6%",
+   "peer_score": 3.3379164996008592,
+   "resolved_on": "2026-11-03"
   },
   {
    "post_id": 46054,
