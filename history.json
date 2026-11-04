@@ -1,6 +1,15 @@
 {
- "updated_at": "2026-11-04T04:12:43+00:00",
+ "updated_at": "2026-11-04T12:12:27+00:00",
  "questions": [
+  {
+   "post_id": 46181,
+   "question": "How many UN member states will vote in favour of the annual TPNW resolution at the First Committee's 2026 action phase?",
+   "type": "Count",
+   "resolution": 129.5,
+   "our_forecast": "median 129.5 [80% range 129.5 to 130.3]",
+   "peer_score": 90.97034737123377,
+   "resolved_on": "2026-10-27"
+  },
   {
    "post_id": 46180,
    "question": "Will Ukraine strike a Russian oil refinery between October 29 and October 31, 2026?",
@@ -567,6 +576,15 @@
    "our_forecast": "median 6.54 [80% range 3.3 to 13.7]",
    "peer_score": 14.646647431526747,
    "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 45960,
+   "question": "What will the United States national average gas price be on November 3, 2026?",
+   "type": "Numeric",
+   "resolution": 4.149,
+   "our_forecast": "median 4.29 [80% range 4.02 to 4.57]",
+   "peer_score": 18.51348003151965,
+   "resolved_on": "2026-11-04"
   },
   {
    "post_id": 45950,
