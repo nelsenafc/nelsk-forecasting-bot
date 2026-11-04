@@ -1,6 +1,24 @@
 {
- "updated_at": "2026-11-04T12:12:27+00:00",
+ "updated_at": "2026-11-04T19:12:57+00:00",
  "questions": [
+  {
+   "post_id": 46228,
+   "question": "What percent of Americans will oppose the Iran War on the eve of Election Day 2026?",
+   "type": "Count",
+   "resolution": 56.5,
+   "our_forecast": "median 55.2 [80% range 52 to 58.4]",
+   "peer_score": 16.56971082093862,
+   "resolved_on": "2026-11-04"
+  },
+  {
+   "post_id": 46229,
+   "question": "What will Democrats' lead be in the congressional generic ballot on the eve of Election Day 2026?",
+   "type": "Count",
+   "resolution": 8.8,
+   "our_forecast": "median 9.27 [80% range 7.99 to 10.6]",
+   "peer_score": 2.1306319539901635,
+   "resolved_on": "2026-11-04"
+  },
   {
    "post_id": 46181,
    "question": "How many UN member states will vote in favour of the annual TPNW resolution at the First Committee's 2026 action phase?",
@@ -9,6 +27,15 @@
    "our_forecast": "median 129.5 [80% range 129.5 to 130.3]",
    "peer_score": 90.97034737123377,
    "resolved_on": "2026-10-27"
+  },
+  {
+   "post_id": 46193,
+   "question": "Will \"None of These Candidates\" receive more votes than the winning margin in the 2026 Nevada gubernatorial election?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "30%",
+   "peer_score": 1.987577190469668,
+   "resolved_on": "2026-11-04"
   },
   {
    "post_id": 46180,
@@ -27,6 +54,15 @@
    "our_forecast": "5%",
    "peer_score": 5.234884193287098,
    "resolved_on": "2026-11-01"
+  },
+  {
+   "post_id": 46192,
+   "question": "What percentage of voters will support Edgewater, Florida's 2026 referendum to ban data centers?",
+   "type": "Count",
+   "resolution": 77.0,
+   "our_forecast": "median 77 [80% range 62.6 to 87.2]",
+   "peer_score": 23.57590289425217,
+   "resolved_on": "2026-11-04"
   },
   {
    "post_id": 46191,
