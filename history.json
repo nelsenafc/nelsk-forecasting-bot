@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-04T19:12:57+00:00",
+ "updated_at": "2026-11-05T02:12:30+00:00",
  "questions": [
   {
    "post_id": 46228,
@@ -567,6 +567,15 @@
    "our_forecast": "median 3.3 [80% range 1.86 to 4.69]",
    "peer_score": 8.828763840282791,
    "resolved_on": "2026-10-29"
+  },
+  {
+   "post_id": 46058,
+   "question": "Will the United States resume its air campaign against Iran before November 10, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "35%",
+   "peer_score": 21.97494535425837,
+   "resolved_on": "2026-11-04"
   },
   {
    "post_id": 46057,
