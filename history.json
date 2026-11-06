@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-06T14:13:44+00:00",
+ "updated_at": "2026-11-06T21:12:58+00:00",
  "questions": [
   {
    "post_id": 46228,
@@ -27,6 +27,15 @@
    "our_forecast": "median 129.5 [80% range 129.5 to 130.3]",
    "peer_score": 90.97034737123377,
    "resolved_on": "2026-10-27"
+  },
+  {
+   "post_id": 46194,
+   "question": "Will the August-October 2026 El Ni\u00f1o index be 2.10\u00b0C or higher?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "12%",
+   "peer_score": 81.5391246420002,
+   "resolved_on": "2026-11-06"
   },
   {
    "post_id": 46193,
@@ -596,6 +605,15 @@
    "resolved_on": "2026-11-03"
   },
   {
+   "post_id": 46095,
+   "question": "Will the Trump administration or a GOP state governor deploy armed officers or troops to a polling or early voting site in 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "23%",
+   "peer_score": -1.536551037142473,
+   "resolved_on": "2026-11-06"
+  },
+  {
    "post_id": 46054,
    "question": "Will Ken Paxton lead James Talarico in the Texas Senate race polling on October 31, 2026?",
    "type": "Binary",
@@ -623,6 +641,15 @@
    "resolved_on": "2026-10-30"
   },
   {
+   "post_id": 45961,
+   "question": "How much in digital advertising revenues will the New York Times Company report in its Q3 2026 earnings release?",
+   "type": "Numeric",
+   "resolution": 109900000.0,
+   "our_forecast": "median 1.165e+08 [80% range 1.119e+08 to 1.213e+08]",
+   "peer_score": -19.791952340134067,
+   "resolved_on": "2026-11-06"
+  },
+  {
    "post_id": 45960,
    "question": "What will the United States national average gas price be on November 3, 2026?",
    "type": "Numeric",
@@ -639,6 +666,15 @@
    "our_forecast": "median 2763 [80% range 2619 to 2984]",
    "peer_score": 16.032767960695967,
    "resolved_on": "2026-10-21"
+  },
+  {
+   "post_id": 46005,
+   "question": "How many jobs will the U.S. economy add in October 2026?",
+   "type": "Count",
+   "resolution": 160500.0,
+   "our_forecast": "median 5.705e+04 [80% range -2.602e+04 to 1.448e+05]",
+   "peer_score": 16.791190353704884,
+   "resolved_on": "2026-11-06"
   },
   {
    "post_id": 45959,
@@ -675,6 +711,15 @@
    "our_forecast": "Nova Scotia 26% / Maine 7% / Massachusetts 17% / New York 8% / New Jersey 7% / Any landmass south of New Jersey 23% / Anywhere else 13%",
    "peer_score": 40.22892897138421,
    "resolved_on": "2026-11-01"
+  },
+  {
+   "post_id": 45884,
+   "question": "What will be Donald Trump's approval rating on Election Day 2026?",
+   "type": "Count",
+   "resolution": 38.3,
+   "our_forecast": "median 36.5 [80% range 34.3 to 38.7]",
+   "peer_score": 14.596590092752537,
+   "resolved_on": "2026-11-06"
   },
   {
    "post_id": 45955,
