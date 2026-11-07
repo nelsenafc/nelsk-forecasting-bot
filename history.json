@@ -1,6 +1,15 @@
 {
- "updated_at": "2026-11-07T11:12:27+00:00",
+ "updated_at": "2026-11-07T18:12:00+00:00",
  "questions": [
+  {
+   "post_id": 46182,
+   "question": "How many cumulative confirmed Ebola cases will the DRC's 2026 outbreak have reported as of October 31, 2026?",
+   "type": "Numeric",
+   "resolution": 10467.0,
+   "our_forecast": "median 1.039e+04 [80% range 1.02e+04 to 1.063e+04]",
+   "peer_score": 20.7534599422969,
+   "resolved_on": "2026-11-01"
+  },
   {
    "post_id": 46228,
    "question": "What percent of Americans will oppose the Iran War on the eve of Election Day 2026?",
