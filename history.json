@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-08T08:12:22+00:00",
+ "updated_at": "2026-11-08T15:15:42+00:00",
  "questions": [
   {
    "post_id": 46182,
@@ -36,6 +36,15 @@
    "our_forecast": "median 129.5 [80% range 129.5 to 130.3]",
    "peer_score": 90.97034737123377,
    "resolved_on": "2026-10-27"
+  },
+  {
+   "post_id": 46195,
+   "question": "How many Swiss regions will be classified as \"Extremely Dry\" according to the Swiss drought platform on November 8, 2026?",
+   "type": "Count",
+   "resolution": 1.5,
+   "our_forecast": "median 8.51 [80% range 2.32 to 19.5]",
+   "peer_score": -1.2780471236392383,
+   "resolved_on": "2026-11-08"
   },
   {
    "post_id": 46194,
