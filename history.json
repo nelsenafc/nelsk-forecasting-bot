@@ -1,6 +1,15 @@
 {
- "updated_at": "2026-11-10T09:14:09+00:00",
+ "updated_at": "2026-11-10T16:14:22+00:00",
  "questions": [
+  {
+   "post_id": 46284,
+   "question": "What will be the largest difference in margin among swing seats in the 2026 United States Senate election?",
+   "type": "Numeric",
+   "resolution": 20.0,
+   "our_forecast": "median 15.3 [80% range 10.3 to 20]",
+   "peer_score": 17.38034307698498,
+   "resolved_on": "2026-11-10"
+  },
   {
    "post_id": 46182,
    "question": "How many cumulative confirmed Ebola cases will the DRC's 2026 outbreak have reported as of October 31, 2026?",
@@ -29,6 +38,15 @@
    "resolved_on": "2026-11-04"
   },
   {
+   "post_id": 46198,
+   "question": "What percentage of the vote will the Massachusetts initiative to repeal recreational marijuana legalization receive?",
+   "type": "Count",
+   "resolution": 24.0,
+   "our_forecast": "median 28.3 [80% range 22 to 35.9]",
+   "peer_score": 15.910105543395593,
+   "resolved_on": "2026-11-10"
+  },
+  {
    "post_id": 46181,
    "question": "How many UN member states will vote in favour of the annual TPNW resolution at the First Committee's 2026 action phase?",
    "type": "Count",
@@ -36,6 +54,15 @@
    "our_forecast": "median 129.5 [80% range 129.5 to 130.3]",
    "peer_score": 90.97034737123377,
    "resolved_on": "2026-10-27"
+  },
+  {
+   "post_id": 46197,
+   "question": "Will California avoid the \"highest vote rule\" with its 2026 billionaire's tax referendum?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "92%",
+   "peer_score": 15.082453618699072,
+   "resolved_on": "2026-11-10"
   },
   {
    "post_id": 46195,
