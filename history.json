@@ -1,6 +1,537 @@
 {
- "updated_at": "2026-11-14T10:14:04+00:00",
+ "updated_at": "2026-11-14T17:14:24+00:00",
  "questions": [
+  {
+   "post_id": 46427,
+   "question": "Will SRS or DOE have publicly stated a cause for the October 28, 2026 Savannah River National Laboratory fire by November 13, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "21%",
+   "peer_score": -0.31569088686345537,
+   "resolved_on": "2026-11-14"
+  },
+  {
+   "post_id": 46426,
+   "question": "Will James Comey have at least two federal criminal cases pending against him on November 13, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "67%",
+   "peer_score": 2.5073893581055358,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46425,
+   "question": "Will the operating rooms of Hospital Privado de Mendoza be open for new surgeries on November 13, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "13%",
+   "peer_score": 9.388341129270627,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46424,
+   "question": "What national wholesale price for graded, loose, white Large shell eggs will the USDA AMS Egg Markets Overview dated November 13, 2026 report? (cents per dozen)",
+   "type": "Count",
+   "resolution": 73.0,
+   "our_forecast": "median 43.3 [80% range 27.6 to 77]",
+   "peer_score": 56.74566356260338,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46423,
+   "question": "Will a second televised debate between Taipei mayoral candidates Chiang Wan-an and Puma Shen be scheduled by November 13, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "43%",
+   "peer_score": -5.73199702178745,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46422,
+   "question": "By how many percentage points will Okta (OKTA) outperform or underperform the software ETF IGV between the October 30 and November 13, 2026 market closes?",
+   "type": "Numeric",
+   "resolution": -9.21,
+   "our_forecast": "median -7.88 [80% range -20.5 to 4.14]",
+   "peer_score": 36.12756472644292,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46421,
+   "question": "What will the IEA's November 2026 Oil Market Report give as Venezuela's crude oil supply for October 2026 (million barrels per day)?",
+   "type": "Count",
+   "resolution": 1.14,
+   "our_forecast": "median 1.17 [80% range 1.13 to 1.22]",
+   "peer_score": 27.876591899309805,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46420,
+   "question": "Will a federal grand jury in Washington, D.C. have returned and publicly disclosed an indictment against James Comey over his 2016 disclosure to The New York Times by November 13, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "41%",
+   "peer_score": -7.500419793789244,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46419,
+   "question": "How many Fifth Circuit news announcements concerning the Judge Ada Brown misconduct proceeding will be dated November 1\u201312, 2026?",
+   "type": "Count",
+   "resolution": 1.0,
+   "our_forecast": "median 0.451 [80% range -0.31 to 2.24]",
+   "peer_score": 1.314403471485253,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46418,
+   "question": "What will the month-over-month change in US producer prices excluding food, energy, and trade services be for October 2026?",
+   "type": "Count",
+   "resolution": 0.5,
+   "our_forecast": "median 0.412 [80% range 0.1 to 0.719]",
+   "peer_score": 14.938908468047021,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46417,
+   "question": "What will the IEA's November 2026 Oil Market Report say about the change in world oil demand in 2026 (y/y, mb/d)?",
+   "type": "Numeric",
+   "resolution": -2.7,
+   "our_forecast": "median -2.62 [80% range -3.17 to -2.16]",
+   "peer_score": -6.411407672249892,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46416,
+   "question": "What will Statistics Poland's flash estimate of Poland's Q3 2026 GDP growth be?",
+   "type": "Count",
+   "resolution": 3.5,
+   "our_forecast": "median 3.76 [80% range 3.26 to 4.24]",
+   "peer_score": -6.985394605244298,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46415,
+   "question": "Will Levent Alp\u00f6ge and Ethan Sussman publicly post a manuscript proving four-dimensional Yang\u2013Mills existence by November 13, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "12%",
+   "peer_score": 11.398884346460088,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46414,
+   "question": "Will AST publish the practical-driving-test calendar or a candidate convocation for its 73-operator selection by 12 November 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "30%",
+   "peer_score": 17.741339118026158,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46413,
+   "question": "How many of Brazil's 27 state capitals will the InfoGripe bulletin of 12 November 2026 list at alert, risk or high-risk level with a rising long-term SRAG trend?",
+   "type": "Count",
+   "resolution": 4.0,
+   "our_forecast": "median 4.39 [80% range 1.02 to 7.87]",
+   "peer_score": -1.235890742334289,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46412,
+   "question": "Will the Detroit Red Wings beat the Florida Panthers in their November 12, 2026 game?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "39%",
+   "peer_score": 0.47063738783006526,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46411,
+   "question": "How many new suspected measles cases will Bangladesh's DGHS report for the 24 hours to 8:00 am on 13 November 2026?",
+   "type": "Numeric",
+   "resolution": 1271.0,
+   "our_forecast": "median 1292 [80% range 973.8 to 1618]",
+   "peer_score": 5.645654154437394,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46410,
+   "question": "How many federal units will Fiocruz's InfoGripe SE 44 bulletin (released 12 November 2026) flag with SRAG incidence at alert level or above and a rising long-term trend?",
+   "type": "Count",
+   "resolution": 0.0,
+   "our_forecast": "median 4.45 [80% range 1.41 to 8.61]",
+   "peer_score": -4.864135974227087,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46409,
+   "question": "What will Samolet's BO-P16 bond close at on 13 November 2026, as a percentage of par?",
+   "type": "Numeric",
+   "resolution": 62.33,
+   "our_forecast": "median 60.5 [80% range 44.2 to 75.1]",
+   "peer_score": 12.883530546655356,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46407,
+   "question": "Which candidate will lead Alaska's U.S. Senate race in first-choice votes as of November 13, 2026?",
+   "type": "Multiple choice",
+   "resolution": "Peltola, Mary (Democrat)",
+   "our_forecast": "Sullivan, Dan S. (Republican, incumbent) 38% / Peltola, Mary (Democrat) 58% / Sullivan, Daniel J. Jr. 2% / Any other candidate 2%",
+   "peer_score": -1.8906267145667819,
+   "resolved_on": "2026-11-14"
+  },
+  {
+   "post_id": 46408,
+   "question": "What will Argentina's month-on-month inflation (INDEC national CPI) be for October 2026?",
+   "type": "Count",
+   "resolution": 2.2,
+   "our_forecast": "median 1.87 [80% range 1.58 to 2.22]",
+   "peer_score": 17.80587293894989,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46406,
+   "question": "What will the EIA report as the week-over-week change in U.S. commercial crude oil inventories (excluding SPR) for the week ending 6 November 2026?",
+   "type": "Numeric",
+   "resolution": 4660.0,
+   "our_forecast": "median -260.2 [80% range -5955 to 5369]",
+   "peer_score": 24.533720065547456,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46404,
+   "question": "Will the winner of the 2026 American League MVP Award be a unanimous selection?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "14%",
+   "peer_score": -14.307560089749746,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46405,
+   "question": "What will be the seasonally adjusted month-on-month percentage change in New Zealand's total electronic card transaction values for October 2026 (Stats NZ, released 12 November 2026)?",
+   "type": "Count",
+   "resolution": -1.2,
+   "our_forecast": "median 0.129 [80% range -1.44 to 1.66]",
+   "peer_score": 14.117241705809032,
+   "resolved_on": "2026-11-11"
+  },
+  {
+   "post_id": 46403,
+   "question": "Will Applied Materials' Q1 FY2027 revenue guidance midpoint be at or above $11.0 billion?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "43%",
+   "peer_score": -8.879484605671486,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46402,
+   "question": "Will Judge McFadden have granted Comey's motion to dismiss the D.C. criminal information by November 13, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "17%",
+   "peer_score": 3.5801857462291427,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46399,
+   "question": "Will Russia's State Duma adopt in first reading, before 13 November 2026, a bill moving the launch of pre-bankruptcy rehabilitation to 1 January 2027?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "24%",
+   "peer_score": 2.0860022999672654,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46401,
+   "question": "How many Washington dairy herds will WSDA have confirmed H5N1-positive as of November 12, 2026?",
+   "type": "Count",
+   "resolution": 43.0,
+   "our_forecast": "median 53.2 [80% range 38.6 to 83.4]",
+   "peer_score": -2.7999174610919613,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46400,
+   "question": "What will the National Bank of Poland's EUR/PLN reference rate be on 13 November 2026?",
+   "type": "Numeric",
+   "resolution": 4.407,
+   "our_forecast": "median 4.42 [80% range 4.36 to 4.49]",
+   "peer_score": 13.068382683235045,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46398,
+   "question": "What percentage of respiratory specimens tested for influenza in U.S. clinical laboratories will be positive in CDC's FluView report for Week 44 (week ending November 7, 2026)?",
+   "type": "Count",
+   "resolution": 11.3,
+   "our_forecast": "median 11 [80% range 8.3 to 14.7]",
+   "peer_score": 4.87729293532283,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46397,
+   "question": "What total revenue will Applied Materials report for Q4 FY2026 (quarter ended October 2026)?",
+   "type": "Numeric",
+   "resolution": 10409.0,
+   "our_forecast": "median 1.039e+04 [80% range 9985 to 1.075e+04]",
+   "peer_score": 6.547862112051275,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46396,
+   "question": "How many turkey poults will USDA NASS report as net placed in the United States during October 2026?",
+   "type": "Numeric",
+   "resolution": 20823.0,
+   "our_forecast": "median 2.148e+04 [80% range 2.01e+04 to 2.272e+04]",
+   "peer_score": -2.942446746903324,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46395,
+   "question": "Will the AAA national average price of regular gasoline be below $4.05 per gallon on November 13, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "30%",
+   "peer_score": -32.141871318374484,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46394,
+   "question": "How many patients will Mendoza's Ministry of Health have confirmed as infected with *Serratia marcescens* in the Hospital Privado outbreak as of November 13, 2026?",
+   "type": "Count",
+   "resolution": 5.0,
+   "our_forecast": "median 5.37 [80% range 4.54 to 7.99]",
+   "peer_score": 31.799626025874616,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46393,
+   "question": "Will at least 450 MEPs vote in favour of the European Parliament's resolution on further EU sanctions against Russia on 12 November 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "31%",
+   "peer_score": 14.304992683585391,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46392,
+   "question": "In the InfoGripe bulletin for epidemiological week 44 of 2026 (expected 12 November 2026), what will Brazil's national long-term SRAG trend be reported as?",
+   "type": "Multiple choice",
+   "resolution": "Decline (queda)",
+   "our_forecast": "Decline (queda) 15% / Stability or oscillation (estabiliza\u00e7\u00e3o/oscila\u00e7\u00e3o) 55% / Growth (aumento/crescimento) 31%",
+   "peer_score": -17.335518507351047,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46390,
+   "question": "What cumulative measles death toll (confirmed + suspected) will Bangladesh's DGHS report for 12 November 2026?",
+   "type": "Count",
+   "resolution": 1299.0,
+   "our_forecast": "median 1296 [80% range 1276 to 1323]",
+   "peer_score": 21.484398858727182,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46391,
+   "question": "What will be the result of the Singapore vs Paraguay match at the Mizuho Blue Challenge on 13 November 2026?",
+   "type": "Multiple choice",
+   "resolution": "Paraguay win",
+   "our_forecast": "Singapore win 6% / Draw 14% / Paraguay win 80%",
+   "peer_score": 7.414292876120909,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46389,
+   "question": "Will rhinovirus account for more than 53.5% of SRAG cases with positive viral results over the last four epidemiological weeks in InfoGripe's epidemiological week 44 bulletin (released 12 November 2026)?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "46%",
+   "peer_score": -4.865448694655976,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46388,
+   "question": "Will Czechia reach the semi-finals of the 2026 IIHF Women's World Championship?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "46%",
+   "peer_score": 6.1586247069744475,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46387,
+   "question": "What will Japan's October 2026 domestic corporate goods price index (CGPI) year-on-year change be?",
+   "type": "Count",
+   "resolution": 7.1,
+   "our_forecast": "median 6.54 [80% range 5.8 to 7.27]",
+   "peer_score": 2.0865830914119643,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46386,
+   "question": "How many commercial ship crossings of the Strait of Hormuz will be recorded on 12 November 2026?",
+   "type": "Count",
+   "resolution": 6.0,
+   "our_forecast": "median 9.54 [80% range 3.53 to 36.7]",
+   "peer_score": -1.1140444942289707,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46385,
+   "question": "What will India's All-India CPI inflation rate (year-on-year) for October 2026 be?",
+   "type": "Numeric",
+   "resolution": 6.09,
+   "our_forecast": "median 6.15 [80% range 5.54 to 6.75]",
+   "peer_score": 15.859507550753644,
+   "resolved_on": "2026-11-11"
+  },
+  {
+   "post_id": 46384,
+   "question": "How many total goals will be scored in the Singapore vs Paraguay match on 13 November 2026?",
+   "type": "Count",
+   "resolution": 5.0,
+   "our_forecast": "median 3.56 [80% range 1.08 to 6.99]",
+   "peer_score": 23.251396182763106,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46382,
+   "question": "How many first-place votes will the winner of the 2026 National League MVP Award receive?",
+   "type": "Count",
+   "resolution": 30.0,
+   "our_forecast": "median 29.5 [80% range 25.6 to 30.3]",
+   "peer_score": 14.867347056471328,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46381,
+   "question": "How many drones will Ukraine's Air Force report Russia launched at Ukraine on the night of 12\u201313 November 2026?",
+   "type": "Numeric",
+   "resolution": 117.0,
+   "our_forecast": "median 164.6 [80% range 79 to 467.3]",
+   "peer_score": 0.18739704999513093,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46379,
+   "question": "What will Serbia's year-on-year consumer price inflation be in October 2026?",
+   "type": "Count",
+   "resolution": 4.4,
+   "our_forecast": "median 3.96 [80% range 3.4 to 4.57]",
+   "peer_score": -11.009362210969515,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46380,
+   "question": "What will Rosstat's preliminary estimate of Russia's Q3 2026 GDP growth (year-on-year) be?",
+   "type": "Count",
+   "resolution": 1.0,
+   "our_forecast": "median 0.774 [80% range 0.212 to 1.56]",
+   "peer_score": -7.6914095521068475,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46378,
+   "question": "What will the October 2026 US PPI for final demand (seasonally adjusted, month-over-month) be as first published by BLS?",
+   "type": "Count",
+   "resolution": 0.3,
+   "our_forecast": "median 0.386 [80% range -0.283 to 1.15]",
+   "peer_score": 18.880739425236403,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46377,
+   "question": "Will Pete Hegseth still be serving as U.S. Secretary of Defense on November 12, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "90%",
+   "peer_score": 9.085770849749007,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46376,
+   "question": "Will Spain's Congress convalidate Real Decreto-ley 29/2026 on the social function of housing before 13 November 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "77%",
+   "peer_score": 12.924105030717582,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46375,
+   "question": "What will be the result of the Italy vs France UEFA Nations League match on 12 November 2026?",
+   "type": "Multiple choice",
+   "resolution": "Italy win",
+   "our_forecast": "Italy win 24% / Draw 26% / France win 49%",
+   "peer_score": -22.905566005407486,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46374,
+   "question": "What will the ONS's first estimate of UK GDP growth be for Q3 2026 (quarter-on-quarter)?",
+   "type": "Count",
+   "resolution": 0.7,
+   "our_forecast": "median 0.7 [80% range 0.43 to 0.926]",
+   "peer_score": 25.159788375637703,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46373,
+   "question": "How will D\u00e1il \u00c9ireann's 12 November 2026 Second Stage proceedings on the Non-Fatal Offences against the Person (Amendment) (Spiking) Bill 2023 conclude?",
+   "type": "Multiple choice",
+   "resolution": "Second Stage granted \u2014 the D\u00e1il gives the Bill a Second Reading on 12 November 2026",
+   "our_forecast": "Second Stage granted \u2014 the D\u00e1il gives the Bill a Second Reading on 12 November 2026 60% / Second Stage refused \u2014 the D\u00e1il declines to give the Bill a Second Reading on 12 November 2026 2% / Division claimed and postponed \u2014 no Second Stage decision is taken on 12 November 2026 21% / No Second Stage question put \u2014 debate adjourned, item not taken, or Bill withdrawn 17%",
+   "peer_score": 17.74916712083628,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46372,
+   "question": "What will Hon Hai (Foxconn) report as net profit attributable to owners of the parent for Q3 2026 (in NT$ billions)?",
+   "type": "Numeric",
+   "resolution": 77.52,
+   "our_forecast": "median 78.8 [80% range 68 to 89.4]",
+   "peer_score": -2.4034204879587873,
+   "resolved_on": "2026-11-12"
+  },
+  {
+   "post_id": 46371,
+   "question": "What will the EU aggregate gas storage filling level be for gas day 12 November 2026?",
+   "type": "Numeric",
+   "resolution": 71.0,
+   "our_forecast": "median 72.8 [80% range 71.1 to 74]",
+   "peer_score": -20.54279595028263,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46370,
+   "question": "Will Germany beat Serbia in their UEFA Nations League match on 13 November 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "74%",
+   "peer_score": 19.75530555037262,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46369,
+   "question": "How many people will have applied to Kyrgyzstan's CEC to run in the January 2027 presidential election by the close of nominations (13 November 2026)?",
+   "type": "Count",
+   "resolution": 11.0,
+   "our_forecast": "median 26.4 [80% range 9.92 to 59.5]",
+   "peer_score": -1.5174501702717562,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46368,
+   "question": "What total revenue will Nebius Group report for Q3 2026?",
+   "type": "Numeric",
+   "resolution": 980.8,
+   "our_forecast": "median 911.3 [80% range 823.1 to 987.7]",
+   "peer_score": -6.750142590515788,
+   "resolved_on": "2026-11-12"
+  },
   {
    "post_id": 46284,
    "question": "What will be the largest difference in margin among swing seats in the 2026 United States Senate election?",
