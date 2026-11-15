@@ -2,8 +2,8 @@
 
 Modes
   tournament  New questions in the Fall 2026 FutureEval tournament, with the stronger
-              line-up, and the current MiniBench, which waits when credit runs low.
-              Publishes. This is what the GitHub workflow runs.
+              line-up. The current MiniBench too when MINIBENCH=on; it waits when
+              credit runs low. Publishes. This is what the GitHub workflow runs.
   test        A few questions from the unscored bot-testing-area. Publishes there
               only, so it is a safe end-to-end check of keys, research and submission.
   cup         The Metaculus Cup, for practice against the human crowd. Publishes.
@@ -48,6 +48,8 @@ TEST_TOURNAMENT = "bot-testing-area"
 MIN_CREDIT_USD = float(os.getenv("MIN_CREDIT_USD", "2"))
 # Below this, MiniBench waits so the remaining credit goes to Fall 2026, where the prize money is.
 MINIBENCH_MIN_CREDIT_USD = float(os.getenv("MINIBENCH_MIN_CREDIT_USD", "6"))
+# Off from round 4 [16 Nov 2026]: three rounds cost about $23 each and paid nothing.
+MINIBENCH_ON = os.getenv("MINIBENCH", "off") == "on"
 TOURNAMENT_URLS = {
     "tournament": "https://www.metaculus.com/tournament/fall-futureeval-2026/",
     "cup": "https://www.metaculus.com/tournament/metaculus-cup-fall-2026/",
@@ -143,7 +145,9 @@ def main() -> None:
         reports = asyncio.run(
             bot.forecast_on_tournament(client.CURRENT_AI_COMPETITION_ID, return_exceptions=True)
         )
-        if minibench_allowed(credit):
+        if not MINIBENCH_ON:
+            print("MiniBench is switched off. Forecasting Fall 2026 only.")
+        elif minibench_allowed(credit):
             bot = build_bot(publish=True, skip_previous=True, use_markets=use_markets)
             reports += asyncio.run(
                 bot.forecast_on_tournament(client.CURRENT_MINIBENCH_ID, return_exceptions=True)
