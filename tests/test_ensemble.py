@@ -13,15 +13,14 @@ from ensemble import (
 )
 
 
-def test_fall_line_up_adds_a_sample_per_lab_and_claude_thinks_harder():
+def test_fall_line_up_moves_claude_to_the_flagship_and_leaves_the_others_alone():
     default = {spec.lab: spec for spec in default_forecasters()}
     fall = {spec.lab: spec for spec in fall_forecasters()}
-    assert {lab: spec.samples for lab, spec in fall.items()} == {
-        lab: spec.samples + 1 for lab, spec in default.items()
-    }
+    assert fall["anthropic"].model == "openrouter/anthropic/claude-opus-5.5"
+    assert fall["anthropic"].samples == default["anthropic"].samples + 1
     assert fall["anthropic"].reasoning_effort == "high"
-    assert fall["openai"].reasoning_effort == default["openai"].reasoning_effort
-    assert [spec.model for spec in fall_forecasters()] == [spec.model for spec in default_forecasters()]
+    assert fall["openai"] == default["openai"]
+    assert fall["google"] == default["google"]
 
 
 def test_each_lab_gets_equal_total_weight():

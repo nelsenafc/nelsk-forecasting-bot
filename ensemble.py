@@ -57,16 +57,22 @@ def default_forecasters() -> list[ForecasterSpec]:
 def fall_forecasters() -> list[ForecasterSpec]:
     """The line-up for Fall 2026 FutureEval questions.
 
-    A Fall question carries roughly 20x the prize money of a MiniBench question and only
-    about one opens a day, so each lab gets one more sample and Claude thinks at high
-    effort. About 2-3x the cost of the default line-up.
+    A Fall question carries roughly 20x the prize money of a MiniBench question, so Claude
+    moves up to the flagship tier with a second sample at high effort. Every top bot whose
+    write-up we read [15 Nov 2026] forecasts with flagship models, and Claude is the one lab
+    that clearly earns its place in our own scores. GPT and Gemini keep their default
+    samples, which holds the cost near the old line-up's [each lab had one more sample and
+    Claude was Sonnet 5.5].
     """
     return [
         replace(
             spec,
+            model=os.getenv("FALL_ANTHROPIC_MODEL", "openrouter/anthropic/claude-opus-5.5"),
             samples=spec.samples + 1,
-            reasoning_effort="high" if spec.lab == "anthropic" else spec.reasoning_effort,
+            reasoning_effort="high",
         )
+        if spec.lab == "anthropic"
+        else spec
         for spec in default_forecasters()
     ]
 
