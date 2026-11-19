@@ -1,6 +1,15 @@
 {
- "updated_at": "2026-11-19T08:11:11+00:00",
+ "updated_at": "2026-11-19T15:11:10+00:00",
  "questions": [
+  {
+   "post_id": 46470,
+   "question": "Will Berkshire Hathaway increase its holdings of Alphabet stock in its Q3 2026 13F filing?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "49%",
+   "peer_score": 15.215566244210773,
+   "resolved_on": "2026-11-19"
+  },
   {
    "post_id": 46427,
    "question": "Will SRS or DOE have publicly stated a cause for the October 28, 2026 Savannah River National Laboratory fire by November 13, 2026?",
@@ -567,6 +576,15 @@
    "our_forecast": "median 9.27 [80% range 7.99 to 10.6]",
    "peer_score": 2.1306319539901635,
    "resolved_on": "2026-11-04"
+  },
+  {
+   "post_id": 46200,
+   "question": "Will Donald Trump attend UFC 334?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "53%",
+   "peer_score": -24.570854572666903,
+   "resolved_on": "2026-11-19"
   },
   {
    "post_id": 46198,
@@ -1314,6 +1332,15 @@
    "our_forecast": "0 or 1 42% / 2 27% / 3 12% / 4 7% / >4 13%",
    "peer_score": 9.329689711950609,
    "resolved_on": "2026-11-01"
+  },
+  {
+   "post_id": 45883,
+   "question": "Will Donald Trump and Vladimir Putin meet in person before December 1, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "48%",
+   "peer_score": -2.3582781904733285,
+   "resolved_on": "2026-11-19"
   },
   {
    "post_id": 45952,
