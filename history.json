@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-19T15:11:10+00:00",
+ "updated_at": "2026-11-19T22:11:31+00:00",
  "questions": [
   {
    "post_id": 46470,
@@ -8,6 +8,24 @@
    "resolution": "no",
    "our_forecast": "49%",
    "peer_score": 15.215566244210773,
+   "resolved_on": "2026-11-19"
+  },
+  {
+   "post_id": 46450,
+   "question": "When will Anthropic be publicly traded?",
+   "type": "Multiple choice",
+   "resolution": "November 18, 19 or 20",
+   "our_forecast": "Before November 18 6% / November 18, 19 or 20 41% / November 23, 24, or 25 24% / After Nov 25 & before Dec 1 7% / Not before December 23%",
+   "peer_score": 6.672388227706732,
+   "resolved_on": "2026-11-19"
+  },
+  {
+   "post_id": 46428,
+   "question": "Will Loudoun County pause final approvals for new Data Centers and Substations before December 16, 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "78%",
+   "peer_score": 17.611217433812485,
    "resolved_on": "2026-11-19"
   },
   {
