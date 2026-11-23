@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-23T16:12:37+00:00",
+ "updated_at": "2026-11-23T23:11:18+00:00",
  "questions": [
   {
    "post_id": 46470,
@@ -9,6 +9,15 @@
    "our_forecast": "49%",
    "peer_score": 15.215566244210773,
    "resolved_on": "2026-11-19"
+  },
+  {
+   "post_id": 46352,
+   "question": "Will Christie\u2019s, Sotheby\u2019s, or Phillips report a public auction sale of a painting for at least $100 million before January 1, 2027?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "95%",
+   "peer_score": 35.44716902448611,
+   "resolved_on": "2026-11-23"
   },
   {
    "post_id": 46450,
@@ -578,6 +587,15 @@
    "resolved_on": "2026-11-10"
   },
   {
+   "post_id": 46278,
+   "question": "Which will occur next with respect to the FDA's review of deramiocel for muscular dystrophy?",
+   "type": "Multiple choice",
+   "resolution": "New complete response letter",
+   "our_forecast": "FDA Approval 25% / New complete response letter 58% / Neither occurs before November 23, 2026 17%",
+   "peer_score": 16.11954151386635,
+   "resolved_on": "2026-11-23"
+  },
+  {
    "post_id": 46182,
    "question": "How many cumulative confirmed Ebola cases will the DRC's 2026 outbreak have reported as of October 31, 2026?",
    "type": "Numeric",
@@ -593,6 +611,15 @@
    "resolution": "2",
    "our_forecast": "0 60% / 1 31% / 2 8% / 3+ 2%",
    "peer_score": -40.08197205240279,
+   "resolved_on": "2026-11-23"
+  },
+  {
+   "post_id": 46186,
+   "question": "What first round vote share will Jos\u00e9 Maria Neves win in the 2026 Cape Verdean presidential election?",
+   "type": "Numeric",
+   "resolution": 60.0,
+   "our_forecast": "median 53.9 [80% range 45 to 60]",
+   "peer_score": 27.115567576875307,
    "resolved_on": "2026-11-23"
   },
   {
@@ -1208,6 +1235,15 @@
    "resolved_on": "2026-10-29"
   },
   {
+   "post_id": 46060,
+   "question": "What will be the Port of Los Angeles's total container volume during October 2026?",
+   "type": "Numeric",
+   "resolution": 1000000.0,
+   "our_forecast": "median 9.353e+05 [80% range 8.578e+05 to 1e+06]",
+   "peer_score": 27.41049516056968,
+   "resolved_on": "2026-11-23"
+  },
+  {
    "post_id": 46058,
    "question": "Will the United States resume its air campaign against Iran before November 10, 2026?",
    "type": "Binary",
@@ -1269,6 +1305,24 @@
    "our_forecast": "median 6.54 [80% range 3.3 to 13.7]",
    "peer_score": 14.646647431526747,
    "resolved_on": "2026-10-30"
+  },
+  {
+   "post_id": 45963,
+   "question": "How many systems on the November 2026 TOP500 list will be exascale?",
+   "type": "Multiple choice",
+   "resolution": "5",
+   "our_forecast": "4 or less 2% / 5 73% / 6 20% / 7 or more 4%",
+   "peer_score": 25.098973716591523,
+   "resolved_on": "2026-11-23"
+  },
+  {
+   "post_id": 45962,
+   "question": "Will Grok 4.8 appear on SpaceXAI's release notes before November 15, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "56%",
+   "peer_score": -4.3608543995884785,
+   "resolved_on": "2026-11-23"
   },
   {
    "post_id": 45961,
