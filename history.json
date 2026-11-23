@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-23T09:11:32+00:00",
+ "updated_at": "2026-11-23T16:12:37+00:00",
  "questions": [
   {
    "post_id": 46470,
@@ -18,6 +18,15 @@
    "our_forecast": "Before November 18 6% / November 18, 19 or 20 41% / November 23, 24, or 25 24% / After Nov 25 & before Dec 1 7% / Not before December 23%",
    "peer_score": 6.672388227706732,
    "resolved_on": "2026-11-19"
+  },
+  {
+   "post_id": 46335,
+   "question": "Will COP31 in Antalya close more than 24 hours after its scheduled end?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "71%",
+   "peer_score": 15.234423756310175,
+   "resolved_on": "2026-11-23"
   },
   {
    "post_id": 46428,
@@ -576,6 +585,15 @@
    "our_forecast": "median 1.039e+04 [80% range 1.02e+04 to 1.063e+04]",
    "peer_score": 20.7534599422969,
    "resolved_on": "2026-11-01"
+  },
+  {
+   "post_id": 46201,
+   "question": "How many nine-dart finishes will there be in the 2026 Grand Slam of Darts?",
+   "type": "Multiple choice",
+   "resolution": "2",
+   "our_forecast": "0 60% / 1 31% / 2 8% / 3+ 2%",
+   "peer_score": -40.08197205240279,
+   "resolved_on": "2026-11-23"
   },
   {
    "post_id": 46228,
