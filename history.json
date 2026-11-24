@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-24T13:10:58+00:00",
+ "updated_at": "2026-11-24T20:10:52+00:00",
  "questions": [
   {
    "post_id": 46470,
@@ -9,6 +9,15 @@
    "our_forecast": "49%",
    "peer_score": 15.215566244210773,
    "resolved_on": "2026-11-19"
+  },
+  {
+   "post_id": 46353,
+   "question": "Will EU member states approve the screening results for Ukraine's accession clusters 4 and 5 before January 1, 2027?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "42%",
+   "peer_score": 26.759222341565646,
+   "resolved_on": "2026-11-24"
   },
   {
    "post_id": 46352,
@@ -99,6 +108,15 @@
    "our_forecast": "median -7.88 [80% range -20.5 to 4.14]",
    "peer_score": 36.12756472644292,
    "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46295,
+   "question": "Will Ekrem \u0130mamo\u011flu be convicted of a crime during Q4 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "25%",
+   "peer_score": -16.12521758678535,
+   "resolved_on": "2026-11-24"
   },
   {
    "post_id": 46421,
@@ -650,6 +668,15 @@
    "resolved_on": "2026-11-19"
   },
   {
+   "post_id": 46199,
+   "question": "Will the winner of Alaska's 2026 gubernatorial election receive fewer votes in the first round than another candidate?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "20%",
+   "peer_score": 7.8179380519608115,
+   "resolved_on": "2026-11-24"
+  },
+  {
    "post_id": 46198,
    "question": "What percentage of the vote will the Massachusetts initiative to repeal recreational marijuana legalization receive?",
    "type": "Count",
@@ -675,6 +702,15 @@
    "our_forecast": "92%",
    "peer_score": 15.082453618699072,
    "resolved_on": "2026-11-10"
+  },
+  {
+   "post_id": 46196,
+   "question": "Will exhausted ballots exceed the winning margin in the 2026 US Senate election in Alaska?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "29%",
+   "peer_score": 10.922130918317622,
+   "resolved_on": "2026-11-24"
   },
   {
    "post_id": 46195,
@@ -1242,6 +1278,15 @@
    "our_forecast": "median 9.353e+05 [80% range 8.578e+05 to 1e+06]",
    "peer_score": 27.41049516056968,
    "resolved_on": "2026-11-23"
+  },
+  {
+   "post_id": 46059,
+   "question": "Will the AfD's national polling average in the INSA Sonntagsfrage be at least 30% on November 14, 2026?",
+   "type": "Binary",
+   "resolution": "no",
+   "our_forecast": "62%",
+   "peer_score": -8.034949243219483,
+   "resolved_on": "2026-11-24"
   },
   {
    "post_id": 46058,
