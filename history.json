@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-25T17:10:33+00:00",
+ "updated_at": "2026-11-26T00:10:21+00:00",
  "questions": [
   {
    "post_id": 46470,
@@ -596,6 +596,15 @@
    "resolved_on": "2026-11-12"
   },
   {
+   "post_id": 46287,
+   "question": "Will any North American country have a CDC travel advisory issued in November 2026?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "37%",
+   "peer_score": 7.570838513713972,
+   "resolved_on": "2026-11-25"
+  },
+  {
    "post_id": 46284,
    "question": "What will be the largest difference in margin among swing seats in the 2026 United States Senate election?",
    "type": "Numeric",
@@ -603,6 +612,15 @@
    "our_forecast": "median 15.3 [80% range 10.3 to 20]",
    "peer_score": 17.38034307698498,
    "resolved_on": "2026-11-10"
+  },
+  {
+   "post_id": 46283,
+   "question": "What will be the 2-party Gallagher disproportionality index for North Carolina's House races in 2026?",
+   "type": "Numeric",
+   "resolution": 20.88,
+   "our_forecast": "median 19.7 [80% range 12.7 to 27.2]",
+   "peer_score": 27.468778971688142,
+   "resolved_on": "2026-11-25"
   },
   {
    "post_id": 46278,
