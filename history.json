@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-26T07:10:30+00:00",
+ "updated_at": "2026-11-26T14:10:27+00:00",
  "questions": [
   {
    "post_id": 46470,
@@ -467,6 +467,15 @@
    "resolution": 30.0,
    "our_forecast": "median 29.5 [80% range 25.6 to 30.3]",
    "peer_score": 14.867347056471328,
+   "resolved_on": "2026-11-13"
+  },
+  {
+   "post_id": 46383,
+   "question": "Which band will Rosstat's October 2026 annual CPI inflation figure fall into?",
+   "type": "Multiple choice",
+   "resolution": "Below 6.90%",
+   "our_forecast": "Below 6.90% 5% / 6.90% to 6.99% 12% / 7.00% to 7.09% 28% / 7.10% to 7.19% 32% / 7.20% to 7.29% 16% / 7.30% or above 8%",
+   "peer_score": -2.0340719227987196,
    "resolved_on": "2026-11-13"
   },
   {
