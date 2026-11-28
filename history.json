@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-27T18:09:59+00:00",
+ "updated_at": "2026-11-28T01:09:51+00:00",
  "questions": [
   {
    "post_id": 46470,
@@ -27,6 +27,15 @@
    "our_forecast": "95%",
    "peer_score": 35.44716902448611,
    "resolved_on": "2026-11-23"
+  },
+  {
+   "post_id": 46351,
+   "question": "Will the Bundestag pass the 2027 German federal budget before 2027?",
+   "type": "Binary",
+   "resolution": "yes",
+   "our_forecast": "93%",
+   "peer_score": 5.147705531011345,
+   "resolved_on": "2026-11-27"
   },
   {
    "post_id": 46450,
